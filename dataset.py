@@ -47,5 +47,7 @@ class IMDbFacialDataset(Dataset):
 
         subdir_idx = bisect.bisect(self.counts, idx)
         subdir_path = os.path.join(self.root_dir, '{0:0=2d}'.format(subdir_idx))
-        name = os.listdir(subdir_path)[idx]
+        # Calculate the image index in the subdir.
+        image_idx = idx if subdir_idx == 0 else idx - self.counts[subdir_idx - 1]
+        name = os.listdir(subdir_path)[image_idx]
         return os.path.join(subdir_path, name)
