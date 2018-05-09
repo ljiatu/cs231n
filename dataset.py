@@ -44,4 +44,6 @@ class IMDbFacialDataset(Dataset):
             if idx >= count:
                 idx -= count
             else:
-                return os.listdir(os.path.join(self.root_dir, '{0:0=2d}'.format(dir_idx)))[idx]
+                subdir_path = os.path.join(self.root_dir, '{0:0=2d}'.format(dir_idx))
+                name = os.listdir(subdir_path)[idx]
+                return os.path.join(subdir_path, name)
