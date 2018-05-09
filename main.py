@@ -4,10 +4,9 @@ import matplotlib.pyplot as plt
 
 def main():
     dataset = IMDbFacialDataset('imdb_crop')
-    image = dataset[0]
-    print(0, image.shape)
-    plt.imshow(image)
-    plt.show()
+    print(0, dataset[0].shape)
+    print(460722, dataset[460722].shape)
+    print(40302, dataset[40302].shape)
 
 
 if __name__ == '__main__':
