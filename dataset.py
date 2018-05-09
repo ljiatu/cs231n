@@ -1,3 +1,4 @@
+import bisect
 import os
 
 from skimage import io
@@ -19,15 +20,19 @@ class IMDbFacialDataset(Dataset):
         self.transform = transform
 
         # Keep track of how many images are in each subdir.
-        # First enumerate all subdirs, and then count the file in subdirs.
+        # First enumerate all subdirs, and then count the number of files in subdirs.
         subdirs = os.listdir(self.root_dir)
-        self.counts = [0] * len(subdirs)
+        counts = [0] * len(subdirs)
         for subdir in subdirs:
-            self.counts[int(subdir)] = len(os.listdir(os.path.join(self.root_dir, subdir)))
-        print(self.counts)
+            counts[int(subdir)] = len(os.listdir(os.path.join(self.root_dir, subdir)))
+        # Roll-up the counts so that searching for an image at a given index takes log time.
+        # For example, if counts = [1, 2, 3, 4], then the rolled-up counts will be [1, 3, 6, 10]
+        for i in range(1, len(counts)):
+            counts[i] += counts[i - 1]
+        self.counts = counts
 
     def __len__(self):
-        return len(self.counts)
+        return self.counts[-1]
 
     def __getitem__(self, idx):
         image = io.imread(self._get_image_name(idx))
@@ -40,10 +45,7 @@ class IMDbFacialDataset(Dataset):
         if idx >= self.__len__():
             raise IndexError(f'Index {idx} out of bounds!')
 
-        for dir_idx, count in enumerate(self.counts):
-            if idx >= count:
-                idx -= count
-            else:
-                subdir_path = os.path.join(self.root_dir, '{0:0=2d}'.format(dir_idx))
-                name = os.listdir(subdir_path)[idx]
-                return os.path.join(subdir_path, name)
+        subdir_idx = bisect.bisect(self.counts, idx)
+        subdir_path = os.path.join(self.root_dir, '{0:0=2d}'.format(subdir_idx))
+        name = os.listdir(subdir_path)[idx]
+        return os.path.join(subdir_path, name)
