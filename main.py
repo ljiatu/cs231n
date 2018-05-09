@@ -4,12 +4,10 @@ import matplotlib.pyplot as plt
 
 def main():
     dataset = IMDbFacialDataset('imdb_crop')
-    for i in range(len(dataset)):
-        print(i, dataset[i].shape)
-
-        if i == 3:
-            plt.show()
-            break
+    image = dataset[0]
+    print(0, image.shape)
+    plt.imshow(image)
+    plt.show()
 
 
 if __name__ == '__main__':
