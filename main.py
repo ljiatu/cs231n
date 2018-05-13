@@ -2,6 +2,7 @@ import torch
 from torch.utils.data import DataLoader
 from torch.utils.data import sampler
 from torchvision import transforms
+import matplotlib.pyplot as plt
 
 from dataset import IMDbFacialDataset
 
@@ -21,23 +22,25 @@ def main():
     loader_train = DataLoader(
         dataset,
         batch_size=BATCH_SIZE,
-        batch_sampler=sampler.SubsetRandomSampler(range(num_train))
+        sampler=sampler.SubsetRandomSampler(range(num_train))
     )
     loader_val = DataLoader(
         dataset,
         batch_size=BATCH_SIZE,
-        batch_sampler=sampler.SubsetRandomSampler(range(num_train, num_train + num_val))
+        sampler=sampler.SubsetRandomSampler(range(num_train, num_train + num_val))
     )
     loader_test = DataLoader(
         dataset,
         batch_size=BATCH_SIZE,
-        batch_sampler=sampler.SubsetRandomSampler(range(num_train + num_val, len(dataset)))
+        sampler=sampler.SubsetRandomSampler(range(num_train + num_val, len(dataset)))
     )
 
     if torch.cuda.is_available():
         device = torch.device('cuda')
     else:
         device = torch.device('cpu')
+
+
 
 
 if __name__ == '__main__':

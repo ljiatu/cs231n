@@ -2,3 +2,4 @@ out/
 *.xml
 __pycache__
 .ipynb_checkpoints/
+imdb_crop/
