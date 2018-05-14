@@ -27,9 +27,9 @@ def main():
 
     model = model.to(device=device)
     num_ftrs = model.fc.in_features
-    model.fc = nn.Linear(num_ftrs, NUM_AGE_BUCKETS)
+    model.fc = nn.Linear(num_ftrs, NUM_AGE_BUCKETS).cuda()
 
-    loss_func = nn.CrossEntropyLoss()
+    loss_func = nn.CrossEntropyLoss().cuda()
     optimizer = optim.Adam(model.fc.parameters())
 
     loader_train, loader_val, loader_test = _split_data()
