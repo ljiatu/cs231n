@@ -9,7 +9,7 @@ from dataset import IMDbFacialDataset
 from trainer import Trainer
 
 BATCH_SIZE = 500
-NUM_AGE_BUCKETS = 100
+NUM_AGE_BUCKETS = 101
 
 
 def main():
@@ -17,6 +17,8 @@ def main():
         device = torch.device('cuda')
     else:
         device = torch.device('cpu')
+
+    print(f'Using device {device}')
 
     # Use a pretrained RESNET-50 model. Freeze all the layers except the last FC layer.
     model = models.resnet18(pretrained=True)
