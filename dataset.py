@@ -57,7 +57,7 @@ class IMDbFacialDataset(Dataset):
         """
         Extracts the DOB and the year the photo was taken can calculates the age of the person.
         Args:
-            file_path: full path to the image file
+            file_path: Full path to the image file.
         Returns:
             Age of the person in the file.
         """
