@@ -8,8 +8,9 @@ from add_channel import AddChannel
 from dataset import IMDbFacialDataset
 from trainer import Trainer
 
-BATCH_SIZE = 500
+BATCH_SIZE = 1000
 NUM_AGE_BUCKETS = 101
+DATA_LOADER_NUM_WORKERS = 10
 
 
 def main():
@@ -30,7 +31,7 @@ def main():
     model.fc = nn.Linear(num_ftrs, NUM_AGE_BUCKETS).cuda()
 
     loss_func = nn.CrossEntropyLoss().cuda()
-    optimizer = optim.Adam(model.fc.parameters())
+    optimizer = optim.Adam(model.fc.parameters(), lr=1e-4)
 
     loader_train, loader_val, loader_test = _split_data()
     model_trainer = Trainer(model, loss_func, optimizer, device, loader_train, loader_val)
@@ -51,16 +52,19 @@ def _split_data():
     loader_train = DataLoader(
         dataset,
         batch_size=BATCH_SIZE,
+        num_workers=DATA_LOADER_NUM_WORKERS,
         sampler=sampler.SubsetRandomSampler(range(num_train))
     )
     loader_val = DataLoader(
         dataset,
         batch_size=BATCH_SIZE,
+        num_workers=DATA_LOADER_NUM_WORKERS,
         sampler=sampler.SubsetRandomSampler(range(num_train, num_train + num_val))
     )
     loader_test = DataLoader(
         dataset,
         batch_size=BATCH_SIZE,
+        num_workers=DATA_LOADER_NUM_WORKERS,
         sampler=sampler.SubsetRandomSampler(range(num_train + num_val, len(dataset)))
     )
 

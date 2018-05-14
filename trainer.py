@@ -35,18 +35,18 @@ class Trainer:
 
                 if t % self.print_every == 0:
                     print('Iteration %d, loss = %.4f' % (t, loss.item()))
-                    self._check_accuracy(self.loader_val, self.model)
+                    self._check_accuracy(self.loader_val)
                     print()
 
-    def _check_accuracy(self, loader, model):
+    def _check_accuracy(self, loader):
         num_correct = 0
         num_samples = 0
-        model.eval()
+        self.model.eval()
         with torch.no_grad():
             for x, y in loader:
                 x = x.to(device=self.device)
                 y = y.to(device=self.device)
-                scores = model(x)
+                scores = self.model(x)
                 _, preds = scores.max(1)
                 num_correct += (preds == y).sum()
                 num_samples += preds.size(0)
