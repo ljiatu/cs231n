@@ -4,6 +4,10 @@ import os
 from skimage import io
 from torch.utils.data import Dataset
 
+# Divide ages into 21 buckets. Each bucket contains 5 ages
+# (except the last bucket, which contains > 99).
+NUM_AGE_BUCKETS = 21
+
 
 class IMDbFacialDataset(Dataset):
     """
@@ -40,7 +44,7 @@ class IMDbFacialDataset(Dataset):
         if self.transform:
             image = self.transform(image)
 
-        return image, self._get_age(file_path)
+        return image, self._get_age_bucket(file_path)
 
     def _get_file_path(self, idx):
         if idx >= self.__len__():
@@ -53,9 +57,12 @@ class IMDbFacialDataset(Dataset):
         name = os.listdir(subdir_path)[image_idx]
         return os.path.join(subdir_path, name)
 
-    def _get_age(self, file_path):
+    def _get_age_bucket(self, file_path):
         """
         Extracts the DOB and the year the photo was taken can calculates the age of the person.
+
+        Note that we use age buckets instead of the exact age.
+
         Args:
             file_path: Full path to the image file.
         Returns:
@@ -65,4 +72,4 @@ class IMDbFacialDataset(Dataset):
         parts = file_name.split('.')[0].split('_')
         dob = int(parts[2].split('-')[0])
         photo_token = int(parts[3])
-        return photo_token - dob
+        return (photo_token - dob) // 5

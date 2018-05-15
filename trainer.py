@@ -59,6 +59,7 @@ class Trainer:
                 loss.backward()
                 self.optimizer.step()
 
+                # Keep track of training loss throughout the epoch.
                 training_loss = loss.item() * x.size(0)
                 num_correct, num_samples = self._check_result(scores, y)
                 running_loss += training_loss
@@ -66,17 +67,16 @@ class Trainer:
                 total_samples += num_samples
 
                 if t % self.print_every == 0:
-                    print('Iteration %d, training loss = %.4f' % (t, training_loss))
+                    print('Iteration %d, training loss = %.4f' % (t, loss.item()))
                     self._check_accuracy(self.loader_val)
                     print()
-
-            print('*' * 30)
-            print(f'End of epoch {e} summary')
-            print(f'Total samples: {total_samples}')
 
             epoch_training_loss = running_loss / total_samples
             epoch_training_acc = running_corrects.double() / total_samples
             epoch_val_loss, epoch_val_acc = self._check_accuracy(self.loader_val)
+            print('*' * 30)
+            print(f'End of epoch {e} summary')
+            print(f'Total samples: {total_samples}')
             print(f'Training loss: {epoch_training_loss}, accuracy: {epoch_training_acc}')
             print(f'Val loss: {epoch_val_loss}, accuracy: {epoch_val_acc}')
             print('*' * 30)
@@ -88,15 +88,13 @@ class Trainer:
                 self._save_model()
 
         time_elapsed = time.time() - start
-        print('Training complete in {:.0f}m {:.0f}s'.format(
-            time_elapsed // 60, time_elapsed % 60))
+        print('Training complete in {:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
         print(f'Best accuracy: {best_val_acc}')
         self.model.load_state_dict(best_model_wts)
 
     def test(self):
         print('Test accuracy')
         self._check_accuracy(self.loader_test)
-        print()
 
     def _check_accuracy(self, loader) -> (float, float):
         total_num_correct = 0
@@ -115,9 +113,10 @@ class Trainer:
                 total_num_correct += num_correct
                 total_num_samples += num_samples
 
+            total_loss /= total_num_samples
             acc = float(total_num_correct) / total_num_samples
             print(f'Loss: {total_loss}')
-            print(f'Got {total_num_correct} / {total_num_samples} correct ({acc * 100}%%)')
+            print(f'Got {total_num_correct} / {total_num_samples} correct ({acc * 100}%)')
             return total_loss, acc
 
     def _check_result(self, scores, y) -> (int, int):

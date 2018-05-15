@@ -5,11 +5,10 @@ from torch.utils.data import sampler
 from torchvision import transforms, models
 
 from add_channel import AddChannel
-from dataset import IMDbFacialDataset
+from dataset import IMDbFacialDataset, NUM_AGE_BUCKETS
 from trainer import Trainer
 
 BATCH_SIZE = 500
-NUM_AGE_BUCKETS = 101
 DATA_LOADER_NUM_WORKERS = 5
 
 
@@ -33,22 +32,30 @@ def main():
     model_trainer = Trainer(
         model, loss_func, optimizer, device,
         loader_train, loader_val, loader_test,
-        num_epochs=20, print_every=25
+        num_epochs=20, print_every=50
     )
     model_trainer.train()
     model_trainer.test()
 
 
 def _split_data():
-    transform = transforms.Compose([
+    train_transform = transforms.Compose([
+        AddChannel(),
+        transforms.ToPILImage(),
+        transforms.Resize((224, 224)),
+        transforms.RandomHorizontalFlip(),
+        transforms.ColorJitter(),
+        transforms.ToTensor(),
+    ])
+    val_transform = transforms.Compose([
         AddChannel(),
         transforms.ToPILImage(),
         transforms.Resize((224, 224)),
         transforms.ToTensor(),
     ])
-    train_dataset = IMDbFacialDataset('imdb_crop', transform)
-    val_dataset = IMDbFacialDataset('imdb_crop', transform)
-    test_dataset = IMDbFacialDataset('imdb_crop', transform)
+    train_dataset = IMDbFacialDataset('imdb_crop', train_transform)
+    val_dataset = IMDbFacialDataset('imdb_crop', val_transform)
+    test_dataset = IMDbFacialDataset('imdb_crop', val_transform)
     # Do a rough 8:1:1 split between training set, validation set and test set.
     num_train = int(len(train_dataset) * 0.4)
     num_val = int(len(val_dataset) * 0.01)
