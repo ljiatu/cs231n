@@ -10,7 +10,7 @@ from trainer import Trainer
 
 BATCH_SIZE = 500
 NUM_AGE_BUCKETS = 101
-DATA_LOADER_NUM_WORKERS = 15
+DATA_LOADER_NUM_WORKERS = 10
 
 
 def main():
@@ -29,7 +29,7 @@ def main():
     model.fc = nn.Linear(num_ftrs, NUM_AGE_BUCKETS).cuda()
 
     loss_func = nn.CrossEntropyLoss().cuda()
-    optimizer = optim.Adam(model.fc.parameters(), lr=1e-4)
+    optimizer = optim.Adam(model.fc.parameters(), lr=1e-5)
 
     loader_train, loader_val, loader_test = _split_data()
     model_trainer = Trainer(

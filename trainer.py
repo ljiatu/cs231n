@@ -25,6 +25,7 @@ class Trainer:
 
     def train(self):
         for e in range(self.num_epochs):
+            print(f'\nEpoch {e}')
             # Save the model at the beginning of each epoch.
             self._save_model()
             for t, (x, y) in enumerate(self.loader_train):
