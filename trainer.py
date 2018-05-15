@@ -115,7 +115,7 @@ class Trainer:
 
             total_loss /= total_num_samples
             acc = float(total_num_correct) / total_num_samples
-            print(f'Loss: {total_loss}')
+            print(f'Val Loss: {total_loss}')
             print(f'Got {total_num_correct} / {total_num_samples} correct ({acc * 100}%)')
             return total_loss, acc
 
