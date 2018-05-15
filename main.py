@@ -34,7 +34,7 @@ def main():
     loader_train, loader_val, loader_test = _split_data()
     model_trainer = Trainer(
         model, loss_func, optimizer, device,
-        loader_test, loader_train, loader_val,
+        loader_train, loader_val, loader_test,
         print_every=25
     )
     model_trainer.train()
