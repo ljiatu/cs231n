@@ -23,19 +23,18 @@ def main():
 
     # Use a pretrained RESNET-18 model.
     model = models.resnet18(pretrained=True)
-
     model = model.to(device=device)
     num_ftrs = model.fc.in_features
     model.fc = nn.Linear(num_ftrs, NUM_AGE_BUCKETS).cuda()
-
     loss_func = nn.CrossEntropyLoss().cuda()
-    optimizer = optim.Adam(model.fc.parameters(), lr=1e-5)
+    optimizer = optim.Adam(model.fc.parameters(), lr=1e-6)
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=5)
 
     loader_train, loader_val, loader_test = _split_data()
     model_trainer = Trainer(
-        model, loss_func, optimizer, device,
+        model, loss_func, optimizer, scheduler, device,
         loader_train, loader_val, loader_test,
-        print_every=25
+        num_epochs=20, print_every=25
     )
     model_trainer.train()
     model_trainer.test()
