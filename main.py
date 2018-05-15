@@ -20,19 +20,19 @@ def main():
 
     print(f'Using device {device}')
 
-    # Use a pretrained RESNET-18 model.
-    model = models.resnet18(pretrained=True)
+    # Use a pretrained RESNET-50 model.
+    model = models.resnet50(pretrained=True)
     model = model.to(device=device)
     num_ftrs = model.fc.in_features
     model.fc = nn.Linear(num_ftrs, NUM_AGE_BUCKETS).cuda()
     loss_func = nn.CrossEntropyLoss().cuda()
-    optimizer = optim.Adam(model.fc.parameters(), lr=1e-3)
+    optimizer = optim.Adam(model.fc.parameters(), lr=1e-2)
 
     loader_train, loader_val, loader_test = _split_data()
     model_trainer = Trainer(
         model, loss_func, optimizer, device,
         loader_train, loader_val, loader_test,
-        num_epochs=20, print_every=50
+        num_epochs=25, print_every=100
     )
     model_trainer.train()
     model_trainer.test()
@@ -57,8 +57,8 @@ def _split_data():
     val_dataset = IMDbFacialDataset('imdb_crop', val_transform)
     test_dataset = IMDbFacialDataset('imdb_crop', val_transform)
     # Do a rough 8:1:1 split between training set, validation set and test set.
-    num_train = int(len(train_dataset) * 0.4)
-    num_val = int(len(val_dataset) * 0.01)
+    num_train = int(len(train_dataset) * 0.8)
+    num_val = int(len(val_dataset) * 0.1)
     loader_train = DataLoader(
         train_dataset,
         batch_size=BATCH_SIZE,
@@ -75,7 +75,7 @@ def _split_data():
         test_dataset,
         batch_size=BATCH_SIZE,
         num_workers=DATA_LOADER_NUM_WORKERS,
-        sampler=sampler.SubsetRandomSampler(range(num_train + num_val, num_train + 2 * num_val))
+        sampler=sampler.SubsetRandomSampler(range(num_train + num_val, len(test_dataset)))
     )
 
     return loader_train, loader_val, loader_test
