@@ -10,7 +10,7 @@ from trainer import Trainer
 
 BATCH_SIZE = 500
 NUM_AGE_BUCKETS = 101
-DATA_LOADER_NUM_WORKERS = 20
+DATA_LOADER_NUM_WORKERS = 15
 
 
 def main():
