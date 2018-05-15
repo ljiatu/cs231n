@@ -68,7 +68,7 @@ def _split_data():
         test_dataset,
         batch_size=BATCH_SIZE,
         num_workers=DATA_LOADER_NUM_WORKERS,
-        sampler=sampler.SubsetRandomSampler(range(num_train + num_val, len(test_dataset)))
+        sampler=sampler.SubsetRandomSampler(range(num_train + num_val, num_train + 2 * num_val))
     )
 
     return loader_train, loader_val, loader_test
