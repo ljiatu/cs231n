@@ -32,8 +32,13 @@ def main():
     optimizer = optim.Adam(model.fc.parameters(), lr=1e-4)
 
     loader_train, loader_val, loader_test = _split_data()
-    model_trainer = Trainer(model, loss_func, optimizer, device, loader_train, loader_val, print_every=25)
+    model_trainer = Trainer(
+        model, loss_func, optimizer, device,
+        loader_test, loader_train, loader_val,
+        print_every=25
+    )
     model_trainer.train()
+    model_trainer.test()
 
 
 def _split_data():
@@ -45,9 +50,10 @@ def _split_data():
     ])
     train_dataset = IMDbFacialDataset('imdb_crop', transform)
     val_dataset = IMDbFacialDataset('imdb_crop', transform)
+    test_dataset = IMDbFacialDataset('imdb_crop', transform)
     # Do a rough 8:1:1 split between training set, validation set and test set.
-    num_train = int(len(dataset) * 0.4)
-    num_val = int(len(dataset) * 0.01)
+    num_train = int(len(train_dataset) * 0.4)
+    num_val = int(len(val_dataset) * 0.01)
     loader_train = DataLoader(
         train_dataset,
         batch_size=BATCH_SIZE,
@@ -61,10 +67,10 @@ def _split_data():
         sampler=sampler.SubsetRandomSampler(range(num_train, num_train + num_val))
     )
     loader_test = DataLoader(
-        dataset,
+        test_dataset,
         batch_size=BATCH_SIZE,
         num_workers=DATA_LOADER_NUM_WORKERS,
-        sampler=sampler.SubsetRandomSampler(range(num_train + num_val, len(dataset)))
+        sampler=sampler.SubsetRandomSampler(range(num_train + num_val, len(test_dataset)))
     )
 
     return loader_train, loader_val, loader_test

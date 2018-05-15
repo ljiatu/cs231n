@@ -1,5 +1,7 @@
 import torch
 
+MODEL_PATH = 'model/model.pt'
+
 
 class Trainer:
     """
@@ -7,7 +9,8 @@ class Trainer:
     """
 
     def __init__(
-            self, model, loss_func, optimizer, device, loader_train, loader_val,
+            self, model, loss_func, optimizer, device,
+            loader_train, loader_val, loader_test,
             num_epochs=10, print_every=50
     ):
         self.model = model
@@ -16,11 +19,14 @@ class Trainer:
         self.device = device
         self.loader_train = loader_train
         self.loader_val = loader_val
+        self.loader_test = loader_test
         self.num_epochs = num_epochs
         self.print_every = print_every
 
     def train(self):
         for e in range(self.num_epochs):
+            # Save the model at the beginning of each epoch.
+            self._save_model()
             for t, (x, y) in enumerate(self.loader_train):
                 self.model.train()
                 x = x.to(device=self.device)
@@ -38,6 +44,11 @@ class Trainer:
                     self._check_accuracy(self.loader_val)
                     print()
 
+    def test(self):
+        print('Test accuracy')
+        self._check_accuracy(self.loader_test)
+        print()
+
     def _check_accuracy(self, loader):
         num_correct = 0
         num_samples = 0
@@ -52,3 +63,6 @@ class Trainer:
                 num_samples += preds.size(0)
             acc = float(num_correct) / num_samples
             print('Got %d / %d correct (%.2f)' % (num_correct, num_samples, 100 * acc))
+
+    def _save_model(self):
+        torch.save(self.model, MODEL_PATH)
