@@ -8,9 +8,9 @@ from add_channel import AddChannel
 from dataset import IMDbFacialDataset
 from trainer import Trainer
 
-BATCH_SIZE = 1000
+BATCH_SIZE = 500
 NUM_AGE_BUCKETS = 101
-DATA_LOADER_NUM_WORKERS = 10
+DATA_LOADER_NUM_WORKERS = 20
 
 
 def main():
@@ -21,10 +21,8 @@ def main():
 
     print(f'Using device {device}')
 
-    # Use a pretrained RESNET-50 model. Freeze all the layers except the last FC layer.
+    # Use a pretrained RESNET-18 model.
     model = models.resnet18(pretrained=True)
-    for param in model.parameters():
-        param.requires_grad = False
 
     model = model.to(device=device)
     num_ftrs = model.fc.in_features
@@ -34,7 +32,7 @@ def main():
     optimizer = optim.Adam(model.fc.parameters(), lr=1e-4)
 
     loader_train, loader_val, loader_test = _split_data()
-    model_trainer = Trainer(model, loss_func, optimizer, device, loader_train, loader_val)
+    model_trainer = Trainer(model, loss_func, optimizer, device, loader_train, loader_val, print_every=25)
     model_trainer.train()
 
 
@@ -45,18 +43,19 @@ def _split_data():
         transforms.Resize((224, 224)),
         transforms.ToTensor(),
     ])
-    dataset = IMDbFacialDataset('imdb_crop', transform)
+    train_dataset = IMDbFacialDataset('imdb_crop', transform)
+    val_dataset = IMDbFacialDataset('imdb_crop', transform)
     # Do a rough 8:1:1 split between training set, validation set and test set.
-    num_train = int(len(dataset) * 0.8)
-    num_val = int(len(dataset) * 0.1)
+    num_train = int(len(dataset) * 0.4)
+    num_val = int(len(dataset) * 0.01)
     loader_train = DataLoader(
-        dataset,
+        train_dataset,
         batch_size=BATCH_SIZE,
         num_workers=DATA_LOADER_NUM_WORKERS,
         sampler=sampler.SubsetRandomSampler(range(num_train))
     )
     loader_val = DataLoader(
-        dataset,
+        val_dataset,
         batch_size=BATCH_SIZE,
         num_workers=DATA_LOADER_NUM_WORKERS,
         sampler=sampler.SubsetRandomSampler(range(num_train, num_train + num_val))
