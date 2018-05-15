@@ -10,7 +10,7 @@ from trainer import Trainer
 
 BATCH_SIZE = 500
 NUM_AGE_BUCKETS = 101
-DATA_LOADER_NUM_WORKERS = 10
+DATA_LOADER_NUM_WORKERS = 5
 
 
 def main():
@@ -27,12 +27,11 @@ def main():
     num_ftrs = model.fc.in_features
     model.fc = nn.Linear(num_ftrs, NUM_AGE_BUCKETS).cuda()
     loss_func = nn.CrossEntropyLoss().cuda()
-    optimizer = optim.Adam(model.fc.parameters(), lr=1e-6)
-    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=5)
+    optimizer = optim.Adam(model.fc.parameters(), lr=1e-3)
 
     loader_train, loader_val, loader_test = _split_data()
     model_trainer = Trainer(
-        model, loss_func, optimizer, scheduler, device,
+        model, loss_func, optimizer, device,
         loader_train, loader_val, loader_test,
         num_epochs=20, print_every=25
     )
