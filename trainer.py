@@ -3,7 +3,7 @@ import copy
 import time
 import torch
 
-MODEL_PATH = 'model/model.pt'
+MODEL_PATH = 'models/model.pt'
 SCHEDULER_PATIENCE = 5
 
 
@@ -108,7 +108,6 @@ class Trainer:
                 scores = self.model(x)
                 loss = self.loss_func(scores, y)
                 total_loss += loss.item() * x.size(0)
-                _, preds = scores.max(1)
                 num_correct, num_samples = self._check_result(scores, y)
                 total_num_correct += num_correct
                 total_num_samples += num_samples
