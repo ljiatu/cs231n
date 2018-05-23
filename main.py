@@ -26,7 +26,7 @@ def main():
     num_ftrs = model.fc.in_features
     model.fc = nn.Linear(num_ftrs, NUM_AGE_BUCKETS).cuda()
     loss_func = nn.CrossEntropyLoss().cuda()
-    optimizer = optim.Adam(model.fc.parameters(), lr=1e-2)
+    optimizer = optim.Adam(model.parameters(), lr=1e-2)
 
     loader_train, loader_val, loader_test = _split_data()
     model_trainer = Trainer(
