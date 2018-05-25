@@ -20,12 +20,12 @@ def main():
 
     print(f'Using device {device}')
 
-    # Use a pretrained RESNET-50 model.
-    model = models.resnet50(pretrained=True)
+    # Use a pretrained RESNET-18 model.
+    model = models.resnet18(pretrained=True)
     model = model.to(device=device)
     num_ftrs = model.fc.in_features
     model.fc = nn.Linear(num_ftrs, NUM_AGE_BUCKETS).cuda()
-    loss_func = nn.CrossEntropyLoss().cuda()
+    loss_func = nn.MSELoss().cuda()
     optimizer = optim.Adam(model.parameters(), lr=1e-2)
 
     loader_train, loader_val, loader_test = _split_data()
