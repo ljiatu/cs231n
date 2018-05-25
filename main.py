@@ -26,13 +26,13 @@ def main():
     num_ftrs = model.fc.in_features
     model.fc = nn.Linear(num_ftrs, NUM_AGE_BUCKETS).cuda()
     loss_func = nn.MSELoss().cuda()
-    optimizer = optim.Adam(model.parameters(), lr=1e-2)
+    optimizer = optim.Adam(model.parameters(), lr=1e-4)
 
     loader_train, loader_val, loader_test = _split_data()
     model_trainer = Trainer(
         model, loss_func, optimizer, device,
         loader_train, loader_val, loader_test,
-        num_epochs=25, print_every=100
+        num_epochs=10, print_every=100
     )
     model_trainer.train()
     model_trainer.test()
