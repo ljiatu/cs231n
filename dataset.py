@@ -4,9 +4,8 @@ import os
 from skimage import io
 from torch.utils.data import Dataset
 
-# Divide ages into 21 buckets. Each bucket contains 5 ages
-# (except the last bucket, which contains > 99).
-NUM_AGE_BUCKETS = 21
+# Divide ages into 101 buckets, which represent ages [0, 100] inclusive.
+NUM_AGE_BUCKETS = 101
 
 
 class IMDbFacialDataset(Dataset):
@@ -72,4 +71,4 @@ class IMDbFacialDataset(Dataset):
         parts = file_name.split('.')[0].split('_')
         dob = int(parts[2].split('-')[0])
         photo_token = int(parts[3])
-        return (photo_token - dob) // 5
+        return photo_token - dob
