@@ -13,12 +13,13 @@ class Trainer:
     """
 
     def __init__(
-            self, model, loss_func, optimizer, device,
+            self, model, loss_func, dtype, optimizer, device,
             loader_train, loader_val, loader_test,
             num_epochs=10, print_every=50
     ):
         self.model = model
         self.loss_func = loss_func
+        self.dtype = dtype
         self.optimizer = optimizer
         self.device = device
         self.loader_train = loader_train
@@ -50,7 +51,7 @@ class Trainer:
             for t, (x, y) in enumerate(self.loader_train):
                 self.model.train()
                 x = x.to(device=self.device)
-                y = y.to(device=self.device)
+                y = y.to(device=self.device).type(self.dtype)
 
                 scores = self.model(x)
                 loss = self.loss_func(scores, y)
@@ -104,7 +105,7 @@ class Trainer:
         with torch.no_grad():
             for x, y in loader:
                 x = x.to(device=self.device)
-                y = y.to(device=self.device)
+                y = y.to(device=self.device).type(self.dtype)
                 scores = self.model(x)
                 loss = self.loss_func(scores, y)
                 total_loss += loss.item() * x.size(0)
