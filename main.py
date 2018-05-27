@@ -6,7 +6,7 @@ from torchvision import transforms, models
 
 from add_channel import AddChannel
 from dataset import IMDbFacialDataset, NUM_AGE_BUCKETS
-from soft_argmax import SoftArgmaxLoss
+from soft_argmax import SoftArgmaxLoss, dtype
 from trainer import Trainer
 
 BATCH_SIZE = 400
@@ -27,8 +27,6 @@ def main():
     num_ftrs = model.fc.in_features
     model.fc = nn.Linear(num_ftrs, NUM_AGE_BUCKETS).cuda()
     loss_func = SoftArgmaxLoss().cuda()
-    # dtype depends on the loss function.
-    dtype = torch.cuda.FloatTensor
     optimizer = optim.Adam(model.parameters(), lr=1e-4)
 
     loader_train, loader_val, loader_test = _split_data()
