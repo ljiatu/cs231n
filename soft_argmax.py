@@ -2,9 +2,6 @@ import torch
 from torch.nn import functional as F
 from torch.nn.modules.loss import _Loss, _assert_no_grad
 
-# dtype depends on the loss function.
-dtype = torch.cuda.FloatTensor
-
 
 class SoftArgmaxLoss(_Loss):
     """
@@ -19,5 +16,5 @@ class SoftArgmaxLoss(_Loss):
     def forward(self, input, target):
         _assert_no_grad(target)
         num_classes = input.size()[1]
-        expected_class = (F.softmax(input, dim=1) * torch.arange(end=num_classes).type(dtype)).sum(dim=1)
+        expected_class = (F.softmax(input, dim=1) * torch.arange(end=num_classes).cuda()).sum(dim=1)
         return F.mse_loss(expected_class, target, size_average=self.size_average, reduce=self.reduce)
