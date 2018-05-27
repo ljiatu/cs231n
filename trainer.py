@@ -121,7 +121,7 @@ class Trainer:
 
     def _check_result(self, scores, y) -> (int, int):
         _, preds = scores.max(1)
-        num_correct = (preds == y).sum()
+        num_correct = (preds == y.type(torch.cuda.LongTensor)).sum()
         num_samples = preds.size(0)
         return num_correct, num_samples
 
