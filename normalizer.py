@@ -42,3 +42,7 @@ def main():
     print(running_std0)
     print(running_std1)
     print('-' * 50)
+
+
+if __name__ == '__main__':
+    main()
