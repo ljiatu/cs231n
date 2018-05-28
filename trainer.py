@@ -125,6 +125,7 @@ class Trainer:
         num_classes = scores.size(1)
         expected_class = ((F.softmax(scores, dim=1) * torch.arange(end=num_classes).cuda())
                           .sum(dim=1)
+                          .round()
                           .type(torch.cuda.LongTensor))
         num_correct = (expected_class == y.type(torch.cuda.LongTensor)).sum()
         num_samples = scores.size(0)
