@@ -10,7 +10,7 @@ from soft_argmax import SoftArgmaxLoss
 from trainer import Trainer
 
 BATCH_SIZE = 400
-DATA_LOADER_NUM_WORKERS = 3
+DATA_LOADER_NUM_WORKERS = 4
 
 
 def main():
@@ -59,9 +59,9 @@ def _split_data():
     train_dataset = IMDbFacialDataset('imdb_crop', train_transform)
     val_dataset = IMDbFacialDataset('imdb_crop', val_transform)
     test_dataset = IMDbFacialDataset('imdb_crop', val_transform)
-    # Do a rough 8:1:1 split between training set, validation set and test set.
-    num_train = int(len(train_dataset) * 0.8)
-    num_val = int(len(val_dataset) * 0.1)
+    # Do a rough 98:1:1 split between training set, validation set and test set.
+    num_train = int(len(train_dataset) * 0.98)
+    num_val = int(len(val_dataset) * 0.01)
     loader_train = DataLoader(
         train_dataset,
         batch_size=BATCH_SIZE,
