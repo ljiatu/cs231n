@@ -2,6 +2,8 @@ import copy
 
 import time
 import torch
+from torch.nn import functional as F
+
 
 MODEL_PATH = 'models/model.pt'
 SCHEDULER_PATIENCE = 5
@@ -120,9 +122,12 @@ class Trainer:
             return total_loss, acc
 
     def _check_result(self, scores, y) -> (int, int):
-        _, preds = scores.max(1)
-        num_correct = (preds == y.type(torch.cuda.LongTensor)).sum()
-        num_samples = preds.size(0)
+        num_classes = scores.size(1)
+        expected_class = ((F.softmax(scores, dim=1) * torch.arange(end=num_classes).cuda())
+                          .sum(dim=1)
+                          .type(torch.cuda.LongTensor))
+        num_correct = (expected_class == y.type(torch.cuda.LongTensor)).sum()
+        num_samples = scores.size(0)
         return num_correct, num_samples
 
     def _save_model(self):
