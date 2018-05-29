@@ -49,12 +49,14 @@ def _split_data():
         transforms.RandomHorizontalFlip(),
         transforms.ColorJitter(),
         transforms.ToTensor(),
+        transforms.Normalize([0.44118115, 0.3723839, 0.3325232], [0.2887202, 0.26569104, 0.26193744]),
     ])
     val_transform = transforms.Compose([
         AddChannel(),
         transforms.ToPILImage(),
         transforms.Resize((224, 224)),
         transforms.ToTensor(),
+        transforms.Normalize([0.44118115, 0.3723839, 0.3325232], [0.2887202, 0.26569104, 0.26193744]),
     ])
     train_dataset = IMDbFacialDataset('imdb_crop', train_transform)
     val_dataset = IMDbFacialDataset('imdb_crop', val_transform)
