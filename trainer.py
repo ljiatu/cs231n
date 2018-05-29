@@ -71,17 +71,18 @@ class Trainer:
 
                 if t % self.print_every == 0:
                     print('Iteration %d, training loss = %.4f' % (t, loss.item()))
-                    self._check_accuracy(self.loader_val)
+                    self._check_accuracy('train', self.loader_train)
+                    self._check_accuracy('validation', self.loader_val)
                     print()
 
             epoch_training_loss = running_loss / total_samples
             epoch_training_acc = running_corrects.double() / total_samples
-            epoch_val_loss, epoch_val_acc = self._check_accuracy(self.loader_val)
+            epoch_val_loss, epoch_val_acc = self._check_accuracy('validation', self.loader_val)
             print('*' * 30)
             print(f'End of epoch {e} summary')
             print(f'Total samples: {total_samples}')
-            print(f'Training loss: {epoch_training_loss}, accuracy: {epoch_training_acc}')
-            print(f'Val loss: {epoch_val_loss}, accuracy: {epoch_val_acc}')
+            print(f'Training loss: {epoch_training_loss}, accuracy: {epoch_training_acc * 100}%')
+            print(f'Val loss: {epoch_val_loss}, accuracy: {epoch_val_acc * 100}%')
             print('*' * 30)
 
             self.scheduler.step(epoch_val_loss)
@@ -97,9 +98,9 @@ class Trainer:
 
     def test(self):
         print('Test accuracy')
-        self._check_accuracy(self.loader_test)
+        self._check_accuracy('test', self.loader_test)
 
-    def _check_accuracy(self, loader) -> (float, float):
+    def _check_accuracy(self, loader_label: str, loader) -> (float, float):
         total_num_correct = 0
         total_num_samples = 0
         total_loss = 0.0
@@ -117,7 +118,7 @@ class Trainer:
 
             total_loss /= total_num_samples
             acc = float(total_num_correct) / total_num_samples
-            print(f'Val Loss: {total_loss}')
+            print(f'{loader_label.capitalize()} Loss: {total_loss}')
             print(f'Got {total_num_correct} / {total_num_samples} correct ({acc * 100}%)')
             return total_loss, acc
 
