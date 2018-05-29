@@ -10,7 +10,7 @@ from soft_argmax import SoftArgmaxLoss
 from trainer import Trainer
 
 BATCH_SIZE = 400
-DATA_LOADER_NUM_WORKERS = 4
+DATA_LOADER_NUM_WORKERS = 10
 
 
 def main():

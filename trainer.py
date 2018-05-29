@@ -4,7 +4,6 @@ import time
 import torch
 from torch.nn import functional as F
 
-
 MODEL_PATH = 'models/model.pt'
 SCHEDULER_PATIENCE = 5
 
