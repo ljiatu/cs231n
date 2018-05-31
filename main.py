@@ -5,7 +5,7 @@ from torch.utils.data import sampler
 from torchvision import transforms, models
 
 from add_channel import AddChannel
-from dataset import IMDbFacialDataset, NUM_AGE_BUCKETS
+from imdb_dataset import IMDbFacialDataset, NUM_AGE_BUCKETS
 from soft_argmax import SoftArgmaxLoss
 from trainer import Trainer
 

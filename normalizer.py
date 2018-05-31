@@ -3,7 +3,7 @@ from torch.utils.data import DataLoader
 from torchvision.transforms import transforms
 
 from add_channel import AddChannel
-from dataset import IMDbFacialDataset
+from imdb_dataset import IMDbFacialDataset
 
 
 def main():
