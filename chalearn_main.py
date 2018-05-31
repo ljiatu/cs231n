@@ -46,12 +46,14 @@ def _split_data():
         transforms.RandomHorizontalFlip(),
         transforms.ColorJitter(),
         transforms.ToTensor(),
+        transforms.Normalize([0.5797703, 0.43427974, 0.38307136], [0.25409877, 0.22383073, 0.21819368]),
     ])
     val_transform = transforms.Compose([
         AddChannel(),
         transforms.ToPILImage(),
         transforms.Resize((224, 224)),
         transforms.ToTensor(),
+        transforms.Normalize([0.5797703, 0.43427974, 0.38307136], [0.25409877, 0.22383073, 0.21819368]),
     ])
     train_dataset = ChaLearnDataset(
         ['ChaLearn/images/train_1', 'ChaLearn/images/train_2'],
