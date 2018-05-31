@@ -92,7 +92,7 @@ class Trainer:
 
         time_elapsed = time.time() - start
         print('Training complete in {:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
-        print(f'Best val accuracy: {best_val_acc}')
+        print(f'Best val accuracy: {best_val_acc * 100}%')
         self.model.load_state_dict(best_model_wts)
 
     def test(self):
