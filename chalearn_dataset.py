@@ -1,4 +1,3 @@
-import bisect
 import csv
 import os
 from typing import List
@@ -32,7 +31,7 @@ class ChaLearnDataset(Dataset):
             self.image_file_paths.extend(f'{image_dir}/{file_path}' for file_path in file_paths)
 
         # Load labels into a dict for fast lookup.
-        with open(label_file_path, 'rb') as label_file:
+        with open(label_file_path) as label_file:
             label_reader = csv.reader(label_file)
             # Skip the header row.
             next(label_reader)
