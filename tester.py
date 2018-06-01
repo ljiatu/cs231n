@@ -8,7 +8,7 @@ from add_channel import AddChannel
 from chalearn_dataset import ChaLearnDataset
 
 MODEL_PATH = 'models/model.pt'
-OUTPUT_FILE_NAME = 'ChaLearn/output.txt'
+OUTPUT_FILE_NAME = 'ChaLearn/output.csv'
 BATCH_SIZE = 400
 DATA_LOADER_NUM_WORKERS = 10
 
@@ -49,8 +49,7 @@ def main():
                 scores = model(x)
                 num_classes = scores.size(1)
                 expected_ages = (
-                    (F.softmax(scores, dim=1) * torch.arange(end=num_classes).to(device=device))
-                    .sum(dim=1).round().type(torch.cuda.LongTensor)
+                    (F.softmax(scores, dim=1) * torch.arange(end=num_classes).to(device=device)).sum(dim=1)
                 )
                 lines = [f'{file_name},{age}\n' for file_name, age in zip(file_names, expected_ages)]
                 output.writelines(lines)
