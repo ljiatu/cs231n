@@ -52,5 +52,9 @@ def main():
                     (F.softmax(scores, dim=1) * torch.arange(end=num_classes).to(device=device))
                     .sum(dim=1).round().type(torch.cuda.LongTensor)
                 )
-                lines = [f'{file_name},{age}' for file_name, age in zip(file_names, expected_ages)]
+                lines = [f'{file_name},{age}\n' for file_name, age in zip(file_names, expected_ages)]
                 output.writelines(lines)
+
+
+if __name__ == '__main__':
+    main()
