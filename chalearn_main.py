@@ -18,7 +18,6 @@ def main():
         device = torch.device('cuda')
     else:
         device = torch.device('cpu')
-
     print(f'Using device {device}')
 
     # Load the pretrained RESNET-18 model.
@@ -68,7 +67,7 @@ def _split_data():
     test_dataset = ChaLearnDataset(
         ['ChaLearn/images/test_1', 'ChaLearn/images/test_2'],
         'ChaLearn/gt/test_gt.csv',
-        train_transform,
+        val_transform,
     )
     loader_train = DataLoader(
         train_dataset,

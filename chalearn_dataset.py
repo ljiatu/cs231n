@@ -47,4 +47,4 @@ class ChaLearnDataset(Dataset):
             image = self.transform(image)
 
         file_name = file_path.split('/')[-1]
-        return image, int(round(float(self.labels[file_name])))
+        return image, file_name  # int(round(float(self.labels[file_name])))
