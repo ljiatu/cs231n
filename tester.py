@@ -8,7 +8,7 @@ from add_channel import AddChannel
 from chalearn_dataset import ChaLearnDataset
 
 MODEL_PATH = 'models/model.pt'
-OUTPUT_FILE_NAME = 'ChaLearn/output.txt'
+OUTPUT_FILE_NAME = 'ChaLearn/output.csv'
 BATCH_SIZE = 400
 DATA_LOADER_NUM_WORKERS = 10
 
