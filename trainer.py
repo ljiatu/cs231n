@@ -2,7 +2,6 @@ import copy
 import time
 
 import torch
-from torch.nn import functional as F
 
 MODEL_PATH = 'models/model.pt'
 SCHEDULER_PATIENCE = 5
@@ -15,7 +14,7 @@ class Trainer:
 
     def __init__(
             self, model, loss_func, dtype, optimizer, device,
-            loader_train, loader_val, loader_test,
+            loader_train, loader_val, loader_test, result_checker,
             num_epochs=10, print_every=50
     ):
         self.model = model
@@ -26,6 +25,7 @@ class Trainer:
         self.loader_train = loader_train
         self.loader_val = loader_val
         self.loader_test = loader_test
+        self.result_checker = result_checker
         self.num_epochs = num_epochs
         self.print_every = print_every
 
@@ -63,7 +63,7 @@ class Trainer:
 
                 # Keep track of training loss throughout the epoch.
                 training_loss = loss.item() * x.size(0)
-                num_correct, num_samples = self._check_result(scores, y)
+                num_correct, num_samples = self.result_checker(scores, y)
                 running_loss += training_loss
                 running_corrects += num_correct
                 total_samples += num_samples
@@ -111,7 +111,7 @@ class Trainer:
                 scores = self.model(x)
                 loss = self.loss_func(scores, y)
                 total_loss += loss.item() * x.size(0)
-                num_correct, num_samples = self._check_result(scores, y)
+                num_correct, num_samples = self.result_checker(scores, y)
                 total_num_correct += num_correct
                 total_num_samples += num_samples
 
@@ -120,16 +120,6 @@ class Trainer:
             print(f'{loader_label.capitalize()} Loss: {total_loss}')
             print(f'Got {total_num_correct} / {total_num_samples} correct ({acc * 100}%)')
             return total_loss, acc
-
-    def _check_result(self, scores, y) -> (int, int):
-        num_classes = scores.size(1)
-        expected_classes = (
-            (F.softmax(scores, dim=1) * torch.arange(end=num_classes).cuda())
-            .sum(dim=1).round().type(torch.cuda.LongTensor)
-        )
-        num_correct = (expected_classes == y.type(torch.cuda.LongTensor)).sum()
-        num_samples = scores.size(0)
-        return num_correct, num_samples
 
     def _save_model(self):
         torch.save(self.model, MODEL_PATH)
