@@ -1,18 +1,17 @@
 import torch
 from torch import nn, optim
+from torch.nn import CrossEntropyLoss
 from torch.utils.data import DataLoader
 from torch.utils.data import sampler
 from torchvision import transforms, models
 
-from add_channel import AddChannel
-from age_detection_result_check import check_result
-from imdb_wiki_dataset import IMDbWikiDataset, NUM_AGE_BUCKETS
-from soft_argmax import SoftArgmaxLoss
+from ethnicity_detection_check_result import check_result
 from trainer import Trainer
+from utk_dataset import NUM_ETHNICITY_BUCKETS, UTKDataset
 
 BATCH_SIZE = 400
 DATA_LOADER_NUM_WORKERS = 10
-IMAGE_DIR = 'imdb_wiki'
+IMAGE_DIR = 'race/UTKFace'
 
 
 def main():
@@ -27,10 +26,10 @@ def main():
     model = models.resnet18(pretrained=True)
     model = model.to(device=device)
     num_ftrs = model.fc.in_features
-    model.fc = nn.Linear(num_ftrs, NUM_AGE_BUCKETS).cuda()
-    loss_func = SoftArgmaxLoss().cuda()
+    model.fc = nn.Linear(num_ftrs, NUM_ETHNICITY_BUCKETS).cuda()
+    loss_func = CrossEntropyLoss().cuda()
     # dtype depends on the loss function.
-    dtype = torch.cuda.FloatTensor
+    dtype = torch.cuda.LongTensor
     optimizer = optim.Adam(model.parameters(), lr=1e-3)
 
     loader_train, loader_val, loader_test = _split_data()
@@ -45,27 +44,24 @@ def main():
 
 def _split_data():
     train_transform = transforms.Compose([
-        AddChannel(),
         transforms.ToPILImage(),
         transforms.Resize((224, 224)),
         transforms.RandomHorizontalFlip(),
-        transforms.ColorJitter(),
         transforms.ToTensor(),
-        transforms.Normalize([0.57089275, 0.4255322, 0.35874116], [0.24959293, 0.21301098, 0.20608185]),
+        transforms.Normalize([0.59702533, 0.4573939, 0.3917105], [0.25691032, 0.22929442, 0.22493552]),
     ])
     val_transform = transforms.Compose([
-        AddChannel(),
         transforms.ToPILImage(),
         transforms.Resize((224, 224)),
         transforms.ToTensor(),
-        transforms.Normalize([0.57089275, 0.4255322, 0.35874116], [0.24959293, 0.21301098, 0.20608185]),
+        transforms.Normalize([0.59702533, 0.4573939, 0.3917105], [0.25691032, 0.22929442, 0.22493552]),
     ])
-    train_dataset = IMDbWikiDataset(IMAGE_DIR, train_transform)
-    val_dataset = IMDbWikiDataset(IMAGE_DIR, val_transform)
-    test_dataset = IMDbWikiDataset(IMAGE_DIR, val_transform)
-    # Do a rough 98:1:1 split between training set, validation set and test set.
-    num_train = int(len(train_dataset) * 0.98)
-    num_val = int(len(val_dataset) * 0.01)
+    train_dataset = UTKDataset(IMAGE_DIR, train_transform)
+    val_dataset = UTKDataset(IMAGE_DIR, val_transform)
+    test_dataset = UTKDataset(IMAGE_DIR, val_transform)
+    # Do a rough 8:1:1 split between training set, validation set and test set.
+    num_train = int(len(train_dataset) * 0.8)
+    num_val = int(len(val_dataset) * 0.1)
     loader_train = DataLoader(
         train_dataset,
         batch_size=BATCH_SIZE,
