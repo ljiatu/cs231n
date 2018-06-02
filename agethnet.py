@@ -36,7 +36,9 @@ class AgethNet(torch.nn.Module):
         predicted_ages = []
         for ethnicity in ETHNICITIES:
             age_scores = self._modules[ethnicity](x)
-            predicted_age = F.softmax(age_scores) * torch.arange(end=NUM_AGE_BUCKETS).to(device=self.device)
+            predicted_age = (F.softmax(age_scores) * torch.arange(end=NUM_AGE_BUCKETS).to(device=self.device)).sum()
             predicted_ages.append(predicted_age)
 
-        return (ethnicity_probabilities * predicted_ages).sum()
+        ages_tensor = torch.cuda.FloatTensor(predicted_ages)
+
+        return (ethnicity_probabilities * ages_tensor).sum()
