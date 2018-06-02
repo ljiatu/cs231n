@@ -5,7 +5,7 @@ from torch.utils.data import sampler
 from torchvision import transforms, models
 
 from add_channel import AddChannel
-from imdb_dataset import IMDbFacialDataset, NUM_AGE_BUCKETS
+from imdb_wiki_dataset import IMDbWikiDataset, NUM_AGE_BUCKETS
 from soft_argmax import SoftArgmaxLoss
 from trainer import Trainer
 
@@ -58,9 +58,9 @@ def _split_data():
         transforms.ToTensor(),
         transforms.Normalize([0.57072407, 0.42465732, 0.35706753], [0.25006303, 0.2127218, 0.20529383]),
     ])
-    train_dataset = IMDbFacialDataset('imdb_crop', train_transform)
-    val_dataset = IMDbFacialDataset('imdb_crop', val_transform)
-    test_dataset = IMDbFacialDataset('imdb_crop', val_transform)
+    train_dataset = IMDbWikiDataset('imdb_wiki', train_transform)
+    val_dataset = IMDbWikiDataset('imdb_wiki', val_transform)
+    test_dataset = IMDbWikiDataset('imdb_wiki', val_transform)
     # Do a rough 98:1:1 split between training set, validation set and test set.
     num_train = int(len(train_dataset) * 0.98)
     num_val = int(len(val_dataset) * 0.01)

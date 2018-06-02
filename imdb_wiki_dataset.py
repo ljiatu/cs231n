@@ -8,9 +8,9 @@ from torch.utils.data import Dataset
 NUM_AGE_BUCKETS = 101
 
 
-class IMDbFacialDataset(Dataset):
+class IMDbWikiDataset(Dataset):
     """
-    IMDb facial age detection dataset.
+    IMDb-Wiki facial age detection dataset.
     """
 
     def __init__(self, root_dir, transform=None):
@@ -69,6 +69,6 @@ class IMDbFacialDataset(Dataset):
         """
         file_name = file_path.split('/')[-1]
         parts = file_name.split('.')[0].split('_')
-        dob = int(parts[2].split('-')[0])
-        photo_token = int(parts[3])
+        dob = int(parts[-2].split('-')[0])
+        photo_token = int(parts[-1])
         return photo_token - dob
