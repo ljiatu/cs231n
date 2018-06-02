@@ -49,7 +49,6 @@ def _split_data():
         transforms.ToPILImage(),
         transforms.Resize((224, 224)),
         transforms.RandomHorizontalFlip(),
-        transforms.ColorJitter(),
         transforms.ToTensor(),
         transforms.Normalize([0.59702533, 0.4573939, 0.3917105], [0.25691032, 0.22929442, 0.22493552]),
     ])
