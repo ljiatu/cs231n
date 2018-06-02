@@ -49,14 +49,14 @@ def _split_data():
         transforms.RandomHorizontalFlip(),
         transforms.ColorJitter(),
         transforms.ToTensor(),
-        transforms.Normalize([0.57072407, 0.42465732, 0.35706753], [0.25006303, 0.2127218, 0.20529383]),
+        transforms.Normalize([0.57089275, 0.4255322, 0.35874116], [0.24959293, 0.21301098, 0.20608185]),
     ])
     val_transform = transforms.Compose([
         AddChannel(),
         transforms.ToPILImage(),
         transforms.Resize((224, 224)),
         transforms.ToTensor(),
-        transforms.Normalize([0.57072407, 0.42465732, 0.35706753], [0.25006303, 0.2127218, 0.20529383]),
+        transforms.Normalize([0.57089275, 0.4255322, 0.35874116], [0.24959293, 0.21301098, 0.20608185]),
     ])
     train_dataset = IMDbWikiDataset('imdb_wiki', train_transform)
     val_dataset = IMDbWikiDataset('imdb_wiki', val_transform)
