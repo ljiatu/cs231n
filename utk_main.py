@@ -31,7 +31,7 @@ def main():
     loss_func = CrossEntropyLoss().cuda()
     # dtype depends on the loss function.
     dtype = torch.cuda.LongTensor
-    optimizer = optim.Adam(model.parameters(), lr=1e-3)
+    optimizer = optim.Adam(model.parameters(), lr=1e-4)
 
     loader_train, loader_val, loader_test = _split_data()
     model_trainer = Trainer(
