@@ -31,6 +31,6 @@ class UTKDataset(Dataset):
         if self.transform:
             image = self.transform(image)
 
-        race = file_path.split('_')[2]
+        race = int(file_path.split('_')[2])
 
         return image, race
