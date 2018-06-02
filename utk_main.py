@@ -9,7 +9,7 @@ from ethnicity_detection_check_result import check_result
 from trainer import Trainer
 from utk_dataset import NUM_ETHNICITY_BUCKETS, UTKDataset
 
-BATCH_SIZE = 400
+BATCH_SIZE = 128
 DATA_LOADER_NUM_WORKERS = 10
 IMAGE_DIR = 'race/UTKFace'
 MODEL_PATH = 'models/utk_model.pt'

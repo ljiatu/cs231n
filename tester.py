@@ -47,10 +47,11 @@ def main():
                 x = x.to(device=device)
                 scores = model(x)
                 num_classes = scores.size(1)
-                expected_ages = (
-                    (F.softmax(scores, dim=1) * torch.arange(end=num_classes).to(device=device)).sum(dim=1)
-                )
-                lines = [f'{file_name},{age}\n' for file_name, age in zip(file_names, expected_ages)]
+                # predicted_ages = (
+                #     (F.softmax(scores, dim=1) * torch.arange(end=num_classes).to(device=device)).sum(dim=1)
+                # )
+                predicted_ages = scores.argmax(1)
+                lines = [f'{file_name},{age}\n' for file_name, age in zip(file_names, predicted_ages)]
                 output.writelines(lines)
 
 
