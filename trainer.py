@@ -84,7 +84,7 @@ class Trainer:
             print(f'Val loss: {epoch_val_loss}, accuracy: {epoch_val_acc * 100}%')
             print('*' * 30)
 
-            self.scheduler.step(epoch_val_loss)
+            self.optimizer.step(epoch_val_loss)
             if epoch_val_acc > best_val_acc:
                 best_val_acc = epoch_val_acc
                 best_model_wts = copy.deepcopy(self.model.state_dict())
