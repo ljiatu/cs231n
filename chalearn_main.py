@@ -4,7 +4,6 @@ from torch.utils.data import DataLoader
 from torch.utils.data import sampler
 from torchvision import transforms
 
-from add_channel import AddChannel
 from chalearn_dataset import ChaLearnDataset
 from soft_argmax import SoftArgmaxLoss
 from trainer import Trainer
@@ -39,7 +38,6 @@ def main():
 
 def _split_data():
     train_transform = transforms.Compose([
-        AddChannel(),
         transforms.ToPILImage(),
         transforms.Resize((224, 224)),
         transforms.RandomHorizontalFlip(),
@@ -48,7 +46,6 @@ def _split_data():
         transforms.Normalize([0.5797703, 0.43427974, 0.38307136], [0.25409877, 0.22383073, 0.21819368]),
     ])
     val_transform = transforms.Compose([
-        AddChannel(),
         transforms.ToPILImage(),
         transforms.Resize((224, 224)),
         transforms.ToTensor(),

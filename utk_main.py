@@ -5,7 +5,6 @@ from torch.utils.data import DataLoader
 from torch.utils.data import sampler
 from torchvision import transforms, models
 
-from add_channel import AddChannel
 from ethnicity_detection_check_result import check_result
 from trainer import Trainer
 from utk_dataset import NUM_ETHNICITY_BUCKETS, UTKDataset
@@ -45,7 +44,6 @@ def main():
 
 def _split_data():
     train_transform = transforms.Compose([
-        AddChannel(),
         transforms.ToPILImage(),
         transforms.Resize((224, 224)),
         transforms.RandomHorizontalFlip(),
@@ -53,7 +51,6 @@ def _split_data():
         transforms.Normalize([0.59702533, 0.4573939, 0.3917105], [0.25691032, 0.22929442, 0.22493552]),
     ])
     val_transform = transforms.Compose([
-        AddChannel(),
         transforms.ToPILImage(),
         transforms.Resize((224, 224)),
         transforms.ToTensor(),
