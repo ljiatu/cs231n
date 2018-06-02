@@ -13,12 +13,13 @@ class AgethNet(torch.nn.Module):
     """
     A CNN predicting age based on ethnicity.
     """
-    def __init__(self, ethnicity_model_path, device):
+    def __init__(self, ethnicity_model_path, device, dtype):
         super(AgethNet, self).__init__()
 
         self.ethnicity_model = torch.load(ethnicity_model_path)
         self.ethnicity_model.eval()
         self.device = device
+        self.dtype = dtype
 
         for ethnicity in ETHNICITIES:
             model = models.resnet18(pretrained=True)
@@ -33,7 +34,7 @@ class AgethNet(torch.nn.Module):
             ethnicity_probabilities = F.softmax(ethnicity_scores, dim=1)
 
         # The 0th position of the ethnicity array must correspond to the same ethnicity in the predicted age array.
-        predicted_ages = torch.zeros(x.shape[0], len(ETHNICITIES))
+        predicted_ages = torch.zeros(x.shape[0], len(ETHNICITIES)).dtype(self.dtype)
         for i, ethnicity in enumerate(ETHNICITIES):
             age_scores = self._modules[ethnicity](x)
             predicted_age = (
