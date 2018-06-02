@@ -8,4 +8,6 @@ for subdir in os.listdir('imdb_crop'):
         year = int(parts[3])
         age = year - dob
         if age < 0 or age > 100:
-            print(f'imdb_crop/{subdir}/file_name')
+            file_path= f'imdb_crop/{subdir}/{file_name}'
+            print(f'Removing {file_path}')
+            os.remove(f'imdb_crop/{subdir}/{file_name}')
