@@ -6,7 +6,7 @@ from torchvision import transforms
 
 from chalearn_dataset import ChaLearnDataset
 
-MODEL_PATH = 'models/model.pt'
+MODEL_PATH = 'models/resnet18-fully-normalized-imdb-wiki-chalearn.pt'
 OUTPUT_FILE_NAME = 'ChaLearn/output.csv'
 BATCH_SIZE = 400
 DATA_LOADER_NUM_WORKERS = 10
