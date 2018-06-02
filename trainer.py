@@ -88,7 +88,7 @@ class Trainer:
             if epoch_val_acc > best_val_acc:
                 best_val_acc = epoch_val_acc
                 best_model_wts = copy.deepcopy(self.model.state_dict())
-                self._save_model()
+                self._save_model(e)
 
         time_elapsed = time.time() - start
         print('Training complete in {:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
@@ -121,5 +121,5 @@ class Trainer:
             print(f'Got {total_num_correct} / {total_num_samples} correct ({acc * 100}%)')
             return total_loss, acc
 
-    def _save_model(self):
-        torch.save(self.model, self.model_path)
+    def _save_model(self, epoch):
+        torch.save(self.model, f'{self.model_path}_epoch_{epoch}')
