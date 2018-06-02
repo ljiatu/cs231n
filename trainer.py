@@ -3,7 +3,6 @@ import time
 
 import torch
 
-MODEL_PATH = 'models/model.pt'
 SCHEDULER_PATIENCE = 5
 
 
@@ -15,7 +14,7 @@ class Trainer:
     def __init__(
             self, model, loss_func, dtype, optimizer, device,
             loader_train, loader_val, loader_test, result_checker,
-            num_epochs=10, print_every=50
+            model_path, num_epochs=10, print_every=50,
     ):
         self.model = model
         self.loss_func = loss_func
@@ -28,6 +27,7 @@ class Trainer:
         self.result_checker = result_checker
         self.num_epochs = num_epochs
         self.print_every = print_every
+        self.model_path = model_path
 
         # The place to run the scheduler during training phase depends on the scheduler itself,
         # so this dependency is a bit leaky. thus put it here.
@@ -122,4 +122,4 @@ class Trainer:
             return total_loss, acc
 
     def _save_model(self):
-        torch.save(self.model, MODEL_PATH)
+        torch.save(self.model, self.model_path)

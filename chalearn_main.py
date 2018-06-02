@@ -11,6 +11,7 @@ from trainer import Trainer
 
 BATCH_SIZE = 400
 DATA_LOADER_NUM_WORKERS = 10
+MODEL_PATH = 'models/model.pt'
 
 
 def main():
@@ -21,7 +22,7 @@ def main():
     print(f'Using device {device}')
 
     # Load the pretrained RESNET-18 model.
-    model = torch.load('models/model.pt')
+    model = torch.load(MODEL_PATH)
     loss_func = SoftArgmaxLoss().cuda()
     # dtype depends on the loss function.
     dtype = torch.cuda.FloatTensor
@@ -31,7 +32,7 @@ def main():
     model_trainer = Trainer(
         model, loss_func, dtype, optimizer, device,
         loader_train, loader_val, loader_test, check_result,
-        num_epochs=5, print_every=100
+        MODEL_PATH, num_epochs=5, print_every=100
     )
     model_trainer.train()
     model_trainer.test()

@@ -13,6 +13,7 @@ from trainer import Trainer
 BATCH_SIZE = 400
 DATA_LOADER_NUM_WORKERS = 10
 IMAGE_DIR = 'imdb_wiki'
+MODEL_PATH = 'models/model.pt'
 
 
 def main():
@@ -37,7 +38,7 @@ def main():
     model_trainer = Trainer(
         model, loss_func, dtype, optimizer, device,
         loader_train, loader_val, loader_test, check_result,
-        num_epochs=5, print_every=500
+        MODEL_PATH, num_epochs=5, print_every=500
     )
     model_trainer.train()
     model_trainer.test()
