@@ -4,6 +4,7 @@ from torch.utils.data import DataLoader
 from torch.utils.data import sampler
 from torchvision import transforms
 
+from age_detection_result_check import check_result
 from chalearn_dataset import ChaLearnDataset
 from soft_argmax import SoftArgmaxLoss
 from trainer import Trainer
@@ -29,8 +30,8 @@ def main():
     loader_train, loader_val, loader_test = _split_data()
     model_trainer = Trainer(
         model, loss_func, dtype, optimizer, device,
-        loader_train, loader_val, loader_test,
-        num_epochs=10, print_every=200
+        loader_train, loader_val, loader_test, check_result,
+        num_epochs=5, print_every=100
     )
     model_trainer.train()
     model_trainer.test()
