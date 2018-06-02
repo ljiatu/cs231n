@@ -29,13 +29,13 @@ def main():
     loss_func = SoftArgmaxLoss().cuda()
     # dtype depends on the loss function.
     dtype = torch.cuda.FloatTensor
-    optimizer = optim.Adam(model.parameters(), lr=1e-4)
+    optimizer = optim.Adam(model.parameters(), lr=1e-3)
 
     loader_train, loader_val, loader_test = _split_data()
     model_trainer = Trainer(
         model, loss_func, dtype, optimizer, device,
         loader_train, loader_val, loader_test,
-        num_epochs=10, print_every=200
+        num_epochs=5, print_every=500
     )
     model_trainer.train()
     model_trainer.test()
@@ -49,14 +49,14 @@ def _split_data():
         transforms.RandomHorizontalFlip(),
         transforms.ColorJitter(),
         transforms.ToTensor(),
-        transforms.Normalize([0.44118115, 0.3723839, 0.3325232], [0.2887202, 0.26569104, 0.26193744]),
+        transforms.Normalize([0.57072407, 0.42465732, 0.35706753], [0.25006303, 0.2127218, 0.20529383]),
     ])
     val_transform = transforms.Compose([
         AddChannel(),
         transforms.ToPILImage(),
         transforms.Resize((224, 224)),
         transforms.ToTensor(),
-        transforms.Normalize([0.44118115, 0.3723839, 0.3325232], [0.2887202, 0.26569104, 0.26193744]),
+        transforms.Normalize([0.57072407, 0.42465732, 0.35706753], [0.25006303, 0.2127218, 0.20529383]),
     ])
     train_dataset = IMDbFacialDataset('imdb_crop', train_transform)
     val_dataset = IMDbFacialDataset('imdb_crop', val_transform)
