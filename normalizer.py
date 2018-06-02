@@ -3,7 +3,7 @@ from torch.utils.data import DataLoader
 from torchvision.transforms import transforms
 
 from add_channel import AddChannel
-from chalearn_dataset import ChaLearnDataset
+from chalearn_dataset import ChaLearnTrainingDataset
 from imdb_wiki_dataset import IMDbWikiDataset
 from utk_dataset import UTKDataset
 
