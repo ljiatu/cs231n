@@ -34,7 +34,7 @@ def main():
     model_trainer = Trainer(
         model, loss_func, dtype, optimizer, device,
         loader_train, loader_val, loader_test, check_result,
-        MODEL_PATH, num_epochs=5, print_every=100
+        MODEL_PATH, num_epochs=10, print_every=100
     )
     model_trainer.train()
     model_trainer.test()
