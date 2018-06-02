@@ -5,7 +5,7 @@ from torch.utils.data import sampler
 from torchvision import transforms
 
 from age_detection_result_check import check_result
-from chalearn_dataset import ChaLearnDataset
+from chalearn_dataset import ChaLearnTrainingDataset
 from soft_argmax import SoftArgmaxLoss
 from trainer import Trainer
 
@@ -25,7 +25,7 @@ def main():
     loss_func = SoftArgmaxLoss().cuda()
     # dtype depends on the loss function.
     dtype = torch.cuda.FloatTensor
-    optimizer = optim.Adam(model.parameters(), lr=1e-4)
+    optimizer = optim.Adam(model.parameters(), lr=1e-5)
 
     loader_train, loader_val, loader_test = _split_data()
     model_trainer = Trainer(
@@ -52,17 +52,17 @@ def _split_data():
         transforms.ToTensor(),
         transforms.Normalize([0.5797703, 0.43427974, 0.38307136], [0.25409877, 0.22383073, 0.21819368]),
     ])
-    train_dataset = ChaLearnDataset(
+    train_dataset = ChaLearnTrainingDataset(
         ['ChaLearn/images/train_1', 'ChaLearn/images/train_2'],
         'ChaLearn/gt/train_gt.csv',
         train_transform,
     )
-    val_dataset = ChaLearnDataset(
+    val_dataset = ChaLearnTrainingDataset(
         ['ChaLearn/images/valid'],
         'ChaLearn/gt/valid_gt.csv',
         val_transform,
     )
-    test_dataset = ChaLearnDataset(
+    test_dataset = ChaLearnTrainingDataset(
         ['ChaLearn/images/test_1', 'ChaLearn/images/test_2'],
         'ChaLearn/gt/test_gt.csv',
         val_transform,

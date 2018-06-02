@@ -4,7 +4,6 @@ from torch.utils.data import DataLoader
 from torch.utils.data import sampler
 from torchvision import transforms
 
-from add_channel import AddChannel
 from chalearn_dataset import ChaLearnDataset
 
 MODEL_PATH = 'models/model.pt'
@@ -21,9 +20,9 @@ def main():
     print(f'Using device {device}')
 
     model = torch.load(MODEL_PATH)
+    model.eval()
 
     transform = transforms.Compose([
-        AddChannel(),
         transforms.ToPILImage(),
         transforms.Resize((224, 224)),
         transforms.ToTensor(),
