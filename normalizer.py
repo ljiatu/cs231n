@@ -4,6 +4,7 @@ from torchvision.transforms import transforms
 
 from add_channel import AddChannel
 from chalearn_dataset import ChaLearnDataset
+from imdb_dataset import IMDbFacialDataset
 
 
 def main():
@@ -18,12 +19,12 @@ def main():
         transforms.Resize((224, 224)),
         transforms.ToTensor(),
     ])
-    # dataset = IMDbFacialDataset('imdb_crop', transform)
-    dataset = ChaLearnDataset(
-        ['ChaLearn/images/train_1', 'ChaLearn/images/train_2'],
-        'ChaLearn/gt/train_gt.csv',
-        transform,
-    )
+    dataset = IMDbFacialDataset('imdb_crop', transform)
+    # dataset = ChaLearnDataset(
+    #     ['ChaLearn/images/train_1', 'ChaLearn/images/train_2'],
+    #     'ChaLearn/gt/train_gt.csv',
+    #     transform,
+    # )
     loader = DataLoader(dataset, batch_size=2048, num_workers=6)
 
     running_mean = []
