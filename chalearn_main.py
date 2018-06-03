@@ -23,7 +23,7 @@ def main():
 
     # Load the pretrained RESNET-18 model.
     model = torch.load(MODEL_PATH)
-    loss_func = SoftArgmaxLoss().cuda()
+    loss_func = SoftArgmaxLoss().to(device=device)
     # dtype depends on the loss function.
     dtype = torch.cuda.FloatTensor
     optimizer = optim.Adam(model.parameters(), lr=1e-5)

@@ -58,7 +58,7 @@ class Trainer:
                 loss = self.loss_func(scores, y)
 
                 self.optimizer.zero_grad()
-                loss.backward()
+                loss.bacward()
                 self.optimizer.step()
 
                 # Keep track of training loss throughout the epoch.
