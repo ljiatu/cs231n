@@ -42,4 +42,4 @@ class AgethNet(torch.nn.Module):
             )
             predicted_ages[:, i] = predicted_age
 
-        return (ethnicity_probabilities * predicted_ages).sum(dim=1)
+        return (ethnicity_probabilities * predicted_ages).sum(dim=1).round()

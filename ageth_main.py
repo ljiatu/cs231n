@@ -5,8 +5,8 @@ from torch.utils.data import sampler
 from torchvision import transforms
 
 from add_channel import AddChannel
-from age_detection_result_check import check_result
 from agethnet import AgethNet
+from agethnet_result_check import check_result
 from imdb_wiki_dataset import IMDbWikiDataset
 from trainer import Trainer
 
