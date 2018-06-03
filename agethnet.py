@@ -41,7 +41,6 @@ class AgethNet(torch.nn.Module):
             )
             predicted_ages.append(predicted_age)
 
-        ages_tensor = torch.zeros(x.shape[0], len(ETHNICITIES), device=self.device, requires_grad=True)
-        torch.stack(predicted_ages, dim=1, out=ages_tensor)
+        ages_tensor = torch.stack(predicted_ages, dim=1)
 
-        return (ethnicity_probabilities * predicted_ages).sum(dim=1).round()
+        return (ethnicity_probabilities * ages_tensor).sum(dim=1).round()
