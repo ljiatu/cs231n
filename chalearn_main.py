@@ -5,7 +5,7 @@ from torch.utils.data import sampler
 from torchvision import transforms
 
 from age_detection_result_check import check_result
-from chalearn_dataset import ChaLearnTrainingDataset
+from chalearn_training_dataset import ChaLearnTrainingDataset
 from soft_argmax import SoftArgmaxLoss
 from trainer import Trainer
 

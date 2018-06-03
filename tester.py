@@ -4,7 +4,7 @@ from torch.utils.data import DataLoader
 from torch.utils.data import sampler
 from torchvision import transforms
 
-from chalearn_dataset import ChaLearnDataset
+from chalearn_training_dataset import ChaLearnDataset
 
 MODEL_PATH = 'models/resnet18-fully-normalized-imdb-wiki-chalearn.pt'
 OUTPUT_FILE_NAME = 'ChaLearn/output.csv'
