@@ -24,10 +24,10 @@ def main():
 
     print(f'Using device {device}')
 
+    # dtype depends on the loss function.
     dtype = torch.cuda.FloatTensor
     model = AgethNet('models/utk_model.pt', device)
     loss_func = torch.nn.MSELoss().to(device=device)
-    # dtype depends on the loss function.
     optimizer = optim.Adam(model.parameters(), lr=1e-2)
 
     loader_train, loader_val, loader_test = _split_data()
