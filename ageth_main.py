@@ -28,7 +28,7 @@ def main():
     dtype = torch.cuda.FloatTensor
     model = AgethNet('models/utk_model.pt', device)
     loss_func = torch.nn.MSELoss().to(device=device)
-    optimizer = optim.Adam(model.parameters(), lr=1e-2)
+    optimizer = optim.Adam(model.parameters(), lr=1e-1)
 
     loader_train, loader_val, loader_test = _split_data()
     model_trainer = Trainer(
