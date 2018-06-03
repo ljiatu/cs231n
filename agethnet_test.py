@@ -29,5 +29,5 @@ if __name__ == '__main__':
     predicted_age = net.forward(augmented)
     print(predicted_age)
     loss_func = torch.nn.MSELoss().to(device=device)
-    loss_func(predicted_age, torch.cuda.FloatTensor([52]))
-    loss_func.backward()
+    loss = loss_func(predicted_age, torch.cuda.FloatTensor([52]))
+    loss.backward()
