@@ -1,4 +1,3 @@
-import copy
 import time
 
 import torch
@@ -69,7 +68,6 @@ class Trainer:
 
                 if t % self.print_every == 0:
                     print('Iteration %d, training loss = %.4f' % (t, loss.item()))
-                    self._check_accuracy('train', self.loader_train)
                     self._check_accuracy('validation', self.loader_val)
                     print()
 
