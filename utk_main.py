@@ -27,8 +27,8 @@ def main():
     model = models.resnet18(pretrained=True)
     model = model.to(device=device)
     num_ftrs = model.fc.in_features
-    model.fc = nn.Linear(num_ftrs, NUM_ETHNICITY_BUCKETS).cuda()
-    loss_func = CrossEntropyLoss().cuda()
+    model.fc = nn.Linear(num_ftrs, NUM_ETHNICITY_BUCKETS).to(device=device)
+    loss_func = CrossEntropyLoss().to(device=device)
     # dtype depends on the loss function.
     dtype = torch.cuda.LongTensor
     optimizer = optim.Adam(model.parameters(), lr=1e-4)
