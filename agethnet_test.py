@@ -25,5 +25,5 @@ if __name__ == '__main__':
 
     net = AgethNet('models/utk_model.pt', device)
     x = io.imread('imdb_wiki/00/nm0684500_rm387289856_1955-3-4_2007.jpg')
-    print(net.forward(x))
+    print(net.forward(train_transform(x)))
     net.backward()
