@@ -16,5 +16,5 @@ class SoftArgmaxLoss(_Loss):
     def forward(self, x, target):
         _assert_no_grad(target)
         num_classes = x.size(1)
-        expected_class = (F.softmax(x, dim=1) * torch.arange(end=num_classes).cuda()).sum(dim=1)
+        expected_class = (F.softmax(x, dim=1) * torch.arange(end=num_classes, requires_grad=True).cuda()).sum(dim=1)
         return F.mse_loss(expected_class, target, size_average=self.size_average, reduce=self.reduce)
