@@ -10,7 +10,7 @@ from agethnet_result_check import check_result
 from imdb_wiki_dataset import IMDbWikiDataset
 from trainer import Trainer
 
-BATCH_SIZE = 64
+BATCH_SIZE = 128
 DATA_LOADER_NUM_WORKERS = 10
 IMAGE_DIR = 'imdb_wiki'
 MODEL_PATH = 'models/ageth_model.pt'
