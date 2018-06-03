@@ -27,7 +27,17 @@ if __name__ == '__main__':
     x = io.imread('imdb_wiki/00/nm0684500_rm387289856_1955-3-4_2007.jpg')
     augmented = train_transform(x).unsqueeze(0).to(device=device)
     predicted_age = net.forward(augmented)
-    print(predicted_age)
+    print(f'predicted_age: {predicted_age}')
     loss_func = torch.nn.MSELoss().to(device=device)
     loss = loss_func(predicted_age, torch.cuda.FloatTensor([52]))
+    print(f'loss: {loss}')
     loss.backward()
+
+#     for ethnicity in ['caucasian']:
+#         params = net._modules[ethnicity].fc.named_parameters()
+#         for name, param in params:
+#             if name == 'bias':
+#                 print(f'{name}: {param.grad}')
+
+    for param in net.ethnicity_model.parameters():
+        print(param.grad)
