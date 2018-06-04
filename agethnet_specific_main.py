@@ -14,6 +14,7 @@ from trainer import Trainer
 BATCH_SIZE = 400
 DATA_LOADER_NUM_WORKERS = 10
 IMAGE_DIR = 'imdb_wiki_ethnicity'
+EPOCHS = [10, 5, 2, 3, 1]
 
 
 def main():
@@ -24,7 +25,7 @@ def main():
 
     print(f'Using device {device}')
 
-    for ethnicity in ETHNICITIES:
+    for ethnicity, num_epochs in zip(ETHNICITIES, EPOCHS):
         model_path = f'models/agethnet_{ethnicity}'
         # Use a pretrained RESNET-18 model.
         model = models.resnet18(pretrained=True)
@@ -34,13 +35,13 @@ def main():
         loss_func = SoftArgmaxLoss().to(device=device)
         # dtype depends on the loss function.
         dtype = torch.cuda.FloatTensor
-        optimizer = optim.Adam(model.parameters(), lr=1e-3)
+        optimizer = optim.Adam(model.parameters(), lr=1e-4)
 
         loader_train, loader_val, loader_test = _split_data(ethnicity)
         model_trainer = Trainer(
             model, loss_func, dtype, optimizer, device,
             loader_train, loader_val, loader_test, check_result,
-            model_path, num_epochs=10, print_every=400
+            model_path, num_epochs=num_epochs, print_every=400
         )
         model_trainer.train()
         model_trainer.test()
