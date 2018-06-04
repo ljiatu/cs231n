@@ -8,8 +8,7 @@ from torch.nn import functional as F
 from torchvision import transforms, models
 
 from add_channel import AddChannel
-
-ETHNICITIES = ['caucasian', 'black', 'asian', 'indian', 'others']
+from constants import ETHNICITIES
 
 
 def main():
@@ -77,6 +76,7 @@ def main():
 
     #     with open('still_uncertain.txt', 'w') as f:
     #         f.writelines(still_uncertain)
+
 
 if __name__ == '__main__':
     main()

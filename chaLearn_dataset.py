@@ -5,9 +5,6 @@ from typing import List
 from skimage import io
 from torch.utils.data import Dataset
 
-# Divide ages into 101 buckets, which represent ages [0, 100] inclusive.
-NUM_AGE_BUCKETS = 101
-
 
 class ChaLearnDataset(Dataset):
     """

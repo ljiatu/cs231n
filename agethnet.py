@@ -1,12 +1,10 @@
 import torch
 from torch import nn
-from torchvision import models
 from torch.nn import functional as F
+from torchvision import models
 
-from imdb_wiki_dataset import NUM_AGE_BUCKETS
+from constants import ETHNICITIES, NUM_AGE_BUCKETS
 from utk_dataset import NUM_ETHNICITY_BUCKETS
-
-ETHNICITIES = ['caucasian', 'black', 'asian', 'indian', 'others']
 
 
 class AgethNet(torch.nn.Module):
