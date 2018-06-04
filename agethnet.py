@@ -3,8 +3,8 @@ from torch import nn
 from torchvision import models
 from torch.nn import functional as F
 
-
 from imdb_wiki_dataset import NUM_AGE_BUCKETS
+from utk_dataset import NUM_ETHNICITY_BUCKETS
 
 ETHNICITIES = ['caucasian', 'black', 'asian', 'indian', 'others']
 
@@ -16,9 +16,14 @@ class AgethNet(torch.nn.Module):
     def __init__(self, ethnicity_model_path, device):
         super(AgethNet, self).__init__()
 
-        self.ethnicity_model = torch.load(ethnicity_model_path)
-        self.ethnicity_model.eval()
         self.device = device
+
+        self.ethnicity_model = models.resnet50(pretrained=True)
+        self.ethnicity_model = self.ethnicity_model.to(device=self.device)
+        num_ftrs = self.ethnicity_model.fc.in_features
+        self.ethnicity_model.fc = nn.Linear(num_ftrs, NUM_ETHNICITY_BUCKETS).to(device=self.device)
+        self.ethnicity_model.load_state_dict(torch.load(ethnicity_model_path))
+        self.ethnicity_model.eval()
 
         for ethnicity in ETHNICITIES:
             model = models.resnet18(pretrained=True)

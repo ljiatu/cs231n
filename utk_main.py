@@ -3,7 +3,7 @@ from torch import nn, optim
 from torch.nn import CrossEntropyLoss
 from torch.utils.data import DataLoader
 from torch.utils.data import sampler
-from torchvision import transforms, models
+from torchvision import models, transforms
 
 from ethnicity_detection_check_result import check_result
 from trainer import Trainer

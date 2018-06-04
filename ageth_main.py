@@ -26,7 +26,7 @@ def main():
 
     # dtype depends on the loss function.
     dtype = torch.cuda.FloatTensor
-    model = AgethNet('models/utk_model.pt', device)
+    model = AgethNet('models/utk_model_resnet_50.pt', device)
     loss_func = torch.nn.MSELoss().to(device=device)
     optimizer = optim.Adam(model.parameters(), lr=1e-5)
 
