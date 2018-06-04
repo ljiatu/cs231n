@@ -48,7 +48,7 @@ def evaluate_predictions(gt, preds):
 def main():
     # Load ground truth & predictions
     labels = load_labels('gt/test_gt.csv')
-    preds = load_predictions('output.csv')
+    preds = load_predictions('output_0001.csv')
 
     # Evaluate predictions
     score = evaluate_predictions(labels, preds)

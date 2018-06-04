@@ -2,12 +2,13 @@ import torch
 from torch.nn import functional as F
 from torch.utils.data import DataLoader
 from torch.utils.data import sampler
-from torchvision import transforms
+from torchvision import models, transforms
 
 from chalearn_training_dataset import ChaLearnDataset
+from constants import NUM_AGE_BUCKETS
 
-MODEL_PATH = 'models/resnet18-fully-normalized-imdb-wiki-chalearn.pt'
-OUTPUT_FILE_NAME = 'ChaLearn/output.csv'
+MODEL_PATH = 'models/model_imdb_wiki_norm_0001.pt'
+OUTPUT_FILE_NAME = 'ChaLearn/output_0001.csv'
 BATCH_SIZE = 400
 DATA_LOADER_NUM_WORKERS = 10
 
@@ -19,7 +20,11 @@ def main():
         device = torch.device('cpu')
     print(f'Using device {device}')
 
-    model = torch.load(MODEL_PATH)
+    model = models.resnet18(pretrained=True)
+    model = model.to(device=device)
+    num_ftrs = model.fc.in_features
+    model.fc = torch.nn.Linear(num_ftrs, NUM_AGE_BUCKETS).to(device=device)
+    model.load_state_dict(torch.load(MODEL_PATH))
     model.eval()
 
     transform = transforms.Compose([
