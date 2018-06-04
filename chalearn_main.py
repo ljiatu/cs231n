@@ -26,7 +26,7 @@ def main():
     loss_func = SoftArgmaxLoss().to(device=device)
     # dtype depends on the loss function.
     dtype = torch.cuda.FloatTensor
-    optimizer = optim.Adam(model.parameters(), lr=1e-5)
+    optimizer = optim.Adam(model.parameters(), lr=1e-3)
 
     loader_train, loader_val, loader_test = _split_data()
     model_trainer = Trainer(
