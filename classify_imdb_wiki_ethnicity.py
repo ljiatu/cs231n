@@ -19,7 +19,7 @@ def main():
         device = torch.device('cpu')
 
     print(f'Using device {device}')
-    
+
     ethnicity_model = models.resnet50(pretrained=True)
     ethnicity_model = ethnicity_model.to(device=device)
     num_ftrs = ethnicity_model.fc.in_features
