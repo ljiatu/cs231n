@@ -12,7 +12,7 @@ from utk_dataset import NUM_ETHNICITY_BUCKETS, UTKDataset
 BATCH_SIZE = 128
 DATA_LOADER_NUM_WORKERS = 10
 IMAGE_DIR = 'race/UTKFace'
-MODEL_PATH = 'models/utk_model.pt'
+MODEL_PATH = 'models/utk_model_resnet_50.pt'
 
 
 def main():
@@ -23,8 +23,8 @@ def main():
 
     print(f'Using device {device}')
 
-    # Use a pretrained RESNET-18 model.
-    model = models.resnet18(pretrained=True)
+    # Use a pretrained RESNET-50 model.
+    model = models.resnet50(pretrained=True)
     model = model.to(device=device)
     num_ftrs = model.fc.in_features
     model.fc = nn.Linear(num_ftrs, NUM_ETHNICITY_BUCKETS).to(device=device)
