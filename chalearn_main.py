@@ -2,10 +2,11 @@ import torch
 from torch import optim
 from torch.utils.data import DataLoader
 from torch.utils.data import sampler
-from torchvision import transforms
+from torchvision import transforms, models
 
 from age_detection_utils import check_result
 from chalearn_training_dataset import ChaLearnTrainingDataset
+from constants import NUM_AGE_BUCKETS
 from soft_argmax import SoftArgmaxLoss
 from trainer import Trainer
 
@@ -22,7 +23,11 @@ def main():
     print(f'Using device {device}')
 
     # Load the pretrained RESNET-18 model.
-    model = torch.load(MODEL_PATH)
+    model = models.resnet18(pretrained=True)
+    model = model.to(device=device)
+    num_ftrs = model.fc.in_features
+    model.fc = torch.nn.Linear(num_ftrs, NUM_AGE_BUCKETS).cuda()
+    model = model.load_state_dict(torch.load(MODEL_PATH))
     loss_func = SoftArgmaxLoss().to(device=device)
     # dtype depends on the loss function.
     dtype = torch.cuda.FloatTensor
