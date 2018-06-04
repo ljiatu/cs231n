@@ -5,8 +5,8 @@ from torch.utils.data import sampler
 from torchvision import models, transforms
 
 from add_channel import AddChannel
-from agethnet_result_check import check_result
-from constants import NUM_AGE_BUCKETS, ETHNICITIES
+from age_detection_utils import check_result
+from constants import ETHNICITIES, NUM_AGE_BUCKETS
 from imdb_wiki_ethnicity_dataset import IMDbWikiEthnicityDataset
 from soft_argmax import SoftArgmaxLoss
 from trainer import Trainer
