@@ -4,14 +4,14 @@ from torch.utils.data import DataLoader
 from torch.utils.data import sampler
 from torchvision import transforms
 
-from age_detection_result_check import check_result
+from age_detection_utils import check_result
 from chalearn_training_dataset import ChaLearnTrainingDataset
 from soft_argmax import SoftArgmaxLoss
 from trainer import Trainer
 
 BATCH_SIZE = 400
 DATA_LOADER_NUM_WORKERS = 10
-MODEL_PATH = 'models/model.pt'
+MODEL_PATH = 'models/model_imdb_wiki_norm_0001.pt'
 
 
 def main():

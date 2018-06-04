@@ -8,8 +8,7 @@ from torch.nn import functional as F
 from torchvision import transforms, models
 
 from add_channel import AddChannel
-
-ETHNICITIES = ['caucasian', 'black', 'asian', 'indian', 'others']
+from constants import ETHNICITIES
 
 
 def main():
@@ -19,7 +18,7 @@ def main():
         device = torch.device('cpu')
 
     print(f'Using device {device}')
-    
+
     ethnicity_model = models.resnet50(pretrained=True)
     ethnicity_model = ethnicity_model.to(device=device)
     num_ftrs = ethnicity_model.fc.in_features
@@ -77,6 +76,7 @@ def main():
 
     #     with open('still_uncertain.txt', 'w') as f:
     #         f.writelines(still_uncertain)
+
 
 if __name__ == '__main__':
     main()

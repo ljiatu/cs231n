@@ -4,8 +4,7 @@ import os
 from skimage import io
 from torch.utils.data import Dataset
 
-# Divide ages into 101 buckets, which represent ages [0, 100] inclusive.
-NUM_AGE_BUCKETS = 101
+from age_detection_utils import get_age_bucket
 
 
 class IMDbWikiDataset(Dataset):
@@ -43,7 +42,7 @@ class IMDbWikiDataset(Dataset):
         if self.transform:
             image = self.transform(image)
 
-        return image, self._get_age_bucket(file_path)
+        return image, get_age_bucket(file_path)
 
     def _get_file_path(self, idx):
         if idx >= self.__len__():
@@ -55,20 +54,3 @@ class IMDbWikiDataset(Dataset):
         image_idx = idx if subdir_idx == 0 else idx - self.counts[subdir_idx - 1]
         name = os.listdir(subdir_path)[image_idx]
         return os.path.join(subdir_path, name)
-
-    def _get_age_bucket(self, file_path):
-        """
-        Extracts the DOB and the year the photo was taken can calculates the age of the person.
-
-        Note that we use age buckets instead of the exact age.
-
-        Args:
-            file_path: Full path to the image file.
-        Returns:
-            Age of the person in the file.
-        """
-        file_name = file_path.split('/')[-1]
-        parts = file_name.split('.')[0].split('_')
-        dob = int(parts[-2].split('-')[0])
-        photo_token = int(parts[-1])
-        return photo_token - dob
