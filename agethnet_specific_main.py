@@ -33,13 +33,13 @@ def main():
     print(f'Using device {device}')
 
     for ethnicity, num_epochs, norm in zip(ETHNICITIES, EPOCHS, NORMS):
-        model_path = f'models/agethnet_{ethnicity}'
+        model_path = f'models/agethnet-{ethnicity}.pt'
         # Use a pretrained RESNET-18 model.
         model = models.resnet18(pretrained=True)
         model = model.to(device=device)
         num_ftrs = model.fc.in_features
         model.fc = torch.nn.Linear(num_ftrs, NUM_AGE_BUCKETS).to(device=device)
-        model.load_state_dict(torch.load('models/resnet18-andy.pt'))
+        # model.load_state_dict(torch.load('models/resnet18-andy.pt'))
         loss_func = SoftArgmaxLoss().to(device=device)
         # dtype depends on the loss function.
         dtype = torch.cuda.FloatTensor
