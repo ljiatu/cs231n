@@ -81,7 +81,7 @@ class Trainer:
             print(f'Val loss: {epoch_val_loss}, accuracy: {epoch_val_acc * 100}%')
             print('*' * 30)
 
-            self.scheduler.step(epoch_val_loss)
+            #             self.scheduler.step(epoch_val_loss)
             if epoch_val_acc > best_val_acc:
                 best_val_acc = epoch_val_acc
                 self._save_model()
