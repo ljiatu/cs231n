@@ -8,7 +8,8 @@ from torch.nn import functional as F
 from torchvision import transforms, models
 
 from add_channel import AddChannel
-from constants import ETHNICITIES
+
+ETHNICITIES = ['caucasian', 'black', 'asian', 'indian', 'others']
 
 
 def main():
@@ -18,7 +19,7 @@ def main():
         device = torch.device('cpu')
 
     print(f'Using device {device}')
-
+    
     ethnicity_model = models.resnet50(pretrained=True)
     ethnicity_model = ethnicity_model.to(device=device)
     num_ftrs = ethnicity_model.fc.in_features
@@ -39,44 +40,44 @@ def main():
     # Otherwise, calls for human intervention.
     precessed = 0
     low_probability_images = []
-    for subdir in os.listdir('imdb_wiki'):
-        print(f'Processing directory {subdir}')
-        for file_name in os.listdir(f'imdb_wiki/{subdir}'):
-            file_path = f'imdb_wiki/{subdir}/{file_name}'
+    #     for subdir in os.listdir('imdb_wiki'):
+    #         print(f'Processing directory {subdir}')
+    #         for file_name in os.listdir(f'imdb_wiki/{subdir}'):
+    #             file_path = f'imdb_wiki/{subdir}/{file_name}'
+    #             image = transform(io.imread(file_path)).unsqueeze(0).to(device=device)
+    #             with torch.no_grad():
+    #                 scores = ethnicity_model(image)
+    #                 probabilities = F.softmax(scores, dim=1)
+    #                 probability, ethnicity = probabilities.max(dim=1)
+    #                 if probability < 0.6:
+    #                     low_probability_images.append(f'{file_path}\n')
+    #                 else:
+    #                     shutil.copy2(file_path, f'imdb_wiki_ethnicity/{ETHNICITIES[ethnicity]}/')
+
+    #                 precessed += 1
+
+    #         print(f'Processed {precessed} files\n')
+
+    #         with open('uncertain.txt', 'w') as f:
+    #             f.writelines(low_probability_images)
+    # Try increasing threshould to 0.7.
+    still_uncertain = []
+    with open('uncertain.txt', 'r') as f:
+        file_paths = f.readlines()
+        for file_path in file_paths:
+            file_path = file_path.strip()
             image = transform(io.imread(file_path)).unsqueeze(0).to(device=device)
             with torch.no_grad():
                 scores = ethnicity_model(image)
                 probabilities = F.softmax(scores, dim=1)
                 probability, ethnicity = probabilities.max(dim=1)
-                if probability < 0.6:
-                    low_probability_images.append(f'{file_path}\n')
+                if probability < 0.5:
+                    still_uncertain.append(f'{file_path},{probability[0]}\n')
                 else:
                     shutil.copy2(file_path, f'imdb_wiki_ethnicity/{ETHNICITIES[ethnicity]}/')
 
-                precessed += 1
-
-        print(f'Processed {precessed} files\n')
-
-        with open('uncertain.txt', 'w') as f:
-            f.writelines(low_probability_images)
-    # Try increasing threshould to 0.7.
-    #     still_uncertain = []
-    #     with open('uncertain.txt', 'r') as f:
-    #         file_paths = f.readlines()
-    #         for file_path in file_paths:
-    #             image = transform(io.imread(file_path.strip())).unsqueeze(0).to(device=device)
-    #             with torch.no_grad():
-    #                 scores = ethnicity_model(image)
-    #                 probabilities = F.softmax(scores, dim=1)
-    #                 probability, ethnicity = probabilities.max(dim=1)
-    #                 if probability < 0.7:
-    #                     still_uncertain.append(f'{file_path},{probability}\n')
-    #                 else:
-    #                     shutil.copy2(file_path, f'imdb_wiki_ethnicity/{ETHNICITIES[ethnicity]}/')
-
-    #     with open('still_uncertain.txt', 'w') as f:
-    #         f.writelines(still_uncertain)
-
+    with open('still_uncertain.txt', 'w') as f:
+        f.writelines(still_uncertain)
 
 if __name__ == '__main__':
     main()
