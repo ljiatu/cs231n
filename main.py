@@ -28,7 +28,7 @@ def main():
     model = models.resnet18(pretrained=True)
     model = model.to(device=device)
     num_ftrs = model.fc.in_features
-    model.fc = nn.Linear(num_ftrs, NUM_AGE_BUCKETS).cuda()
+    model.fc = torch.nn.Linear(num_ftrs, NUM_AGE_BUCKETS).to(device=device)
     loss_func = SoftArgmaxLoss().cuda()
     # dtype depends on the loss function.
     dtype = torch.cuda.FloatTensor
