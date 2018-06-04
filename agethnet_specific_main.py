@@ -2,7 +2,7 @@ import torch
 from torch import optim
 from torch.utils.data import DataLoader
 from torch.utils.data import sampler
-from torchvision import transforms, models
+from torchvision import models, transforms
 
 from add_channel import AddChannel
 from agethnet_result_check import check_result
