@@ -15,6 +15,13 @@ BATCH_SIZE = 400
 DATA_LOADER_NUM_WORKERS = 10
 IMAGE_DIR = 'imdb_wiki_ethnicity'
 EPOCHS = [10, 5, 2, 3, 1]
+NORMS = [
+    [[0.58159447, 0.43522802, 0.36891466], [0.24821207, 0.21232615, 0.20570053]],
+    [[0.45464125, 0.324485, 0.2616199], [0.23923942, 0.19709928, 0.18780835]],
+    [[0.59417844, 0.45388743, 0.38434005], [0.2409343, 0.21290545, 0.20881842]],
+    [[0.5519065, 0.40091512, 0.3221176], [0.24537557, 0.20903918, 0.19956224]],
+    [[0.5589975, 0.40766674, 0.33462912], [0.26535666, 0.21328007, 0.19708937]],
+]
 
 
 def main():
@@ -25,7 +32,7 @@ def main():
 
     print(f'Using device {device}')
 
-    for ethnicity, num_epochs in zip(ETHNICITIES, EPOCHS):
+    for ethnicity, num_epochs, norm in zip(ETHNICITIES, EPOCHS, NORMS):
         model_path = f'models/agethnet_{ethnicity}'
         # Use a pretrained RESNET-18 model.
         model = models.resnet18(pretrained=True)
@@ -38,7 +45,7 @@ def main():
         dtype = torch.cuda.FloatTensor
         optimizer = optim.Adam(model.parameters(), lr=1e-4)
 
-        loader_train, loader_val, loader_test = _split_data(ethnicity)
+        loader_train, loader_val, loader_test = _split_data(ethnicity, norm)
         model_trainer = Trainer(
             model, loss_func, dtype, optimizer, device,
             loader_train, loader_val, loader_test, check_result,
@@ -48,7 +55,7 @@ def main():
         model_trainer.test()
 
 
-def _split_data(ethnicity):
+def _split_data(ethnicity, norm):
     train_transform = transforms.Compose([
         AddChannel(),
         transforms.ToPILImage(),
@@ -56,14 +63,14 @@ def _split_data(ethnicity):
         transforms.RandomHorizontalFlip(),
         transforms.ColorJitter(),
         transforms.ToTensor(),
-        transforms.Normalize([0.57089275, 0.4255322, 0.35874116], [0.24959293, 0.21301098, 0.20608185]),
+        transforms.Normalize(norm[0], norm[1]),
     ])
     val_transform = transforms.Compose([
         AddChannel(),
         transforms.ToPILImage(),
         transforms.Resize((224, 224)),
         transforms.ToTensor(),
-        transforms.Normalize([0.57089275, 0.4255322, 0.35874116], [0.24959293, 0.21301098, 0.20608185]),
+        transforms.Normalize(norm[0], norm[1]),
     ])
     train_dataset = IMDbWikiEthnicityDataset(f'{IMAGE_DIR}/{ethnicity}', train_transform)
     val_dataset = IMDbWikiEthnicityDataset(f'{IMAGE_DIR}/{ethnicity}', val_transform)
