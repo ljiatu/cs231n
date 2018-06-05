@@ -11,7 +11,7 @@ from imdb_wiki_ethnicity_dataset import IMDbWikiEthnicityDataset
 from soft_argmax import SoftArgmaxLoss
 from trainer import Trainer
 
-BATCH_SIZE = 400
+BATCH_SIZE = 350
 DATA_LOADER_NUM_WORKERS = 10
 IMAGE_DIR = 'imdb_wiki_ethnicity'
 EPOCHS = [10, 5, 2, 3, 1]
