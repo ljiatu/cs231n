@@ -35,7 +35,7 @@ def main():
         age_model = age_model.to(device=device)
         num_ftrs = age_model.fc.in_features
         age_model.fc = torch.nn.Linear(num_ftrs, NUM_AGE_BUCKETS).to(device=device)
-        age_model.load_state_dict(torch.load(f'models/{ethnicity}'))
+        age_model.load_state_dict(torch.load(f'models/agethnet-{ethnicity}.pt'))
         age_model.eval()
         age_models.append(age_model)
 
