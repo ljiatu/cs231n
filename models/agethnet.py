@@ -37,7 +37,7 @@ class AgethNet(torch.nn.Module):
 
         # The 0th position of the ethnicity array must correspond to the same ethnicity in the predicted age array.
         predicted_ages = []
-        for i, ethnicity in enumerate(ETHNICITIES):
+        for ethnicity in ETHNICITIES:
             age_scores = self._modules[ethnicity](x)
             predicted_age = (
                 (F.softmax(age_scores, dim=1) * torch.arange(end=NUM_AGE_BUCKETS, device=self.device, requires_grad=True)).sum(dim=1)

@@ -23,7 +23,7 @@ def main():
     ethnicity_model = models.resnet50(pretrained=True)
     ethnicity_model = ethnicity_model.to(device=device)
     num_ftrs = ethnicity_model.fc.in_features
-    ethnicity_model.fc = nn.Linear(num_ftrs, 5).to(device=device)
+    ethnicity_model.fc = nn.Linear(num_ftrs, len(ETHNICITIES)).to(device=device)
     ethnicity_model.load_state_dict(torch.load('models/utk_model_resnet_50.pt'))
     ethnicity_model.eval()
 
