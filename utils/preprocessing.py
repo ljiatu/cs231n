@@ -1,7 +1,7 @@
 import os
 
 if __name__ == '__main__':
-    for subdir in os.listdir('imdb_wiki'):
+    for subdir in os.listdir('../imdb_wiki'):
         for file_name in os.listdir(f'imdb_wiki/{subdir}'):
             parts = file_name.split('.')[0].split('_')
             dob = int(parts[-2].split('-')[0])

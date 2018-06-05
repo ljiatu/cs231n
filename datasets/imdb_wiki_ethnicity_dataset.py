@@ -3,7 +3,7 @@ import os
 from skimage import io
 from torch.utils.data import Dataset
 
-from age_detection_utils import get_age_bucket
+from utils.age_detection_utils import get_age_bucket
 
 
 class IMDbWikiEthnicityDataset(Dataset):

@@ -2,8 +2,8 @@ import torch
 from skimage import io
 from torchvision.transforms import transforms
 
-from add_channel import AddChannel
-from agethnet import AgethNet
+from utils.add_channel import AddChannel
+from models.agethnet import AgethNet
 
 if __name__ == '__main__':
     if torch.cuda.is_available():

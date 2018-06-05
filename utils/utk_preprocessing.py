@@ -1,6 +1,6 @@
 import os
 
-DIR_NAME = 'race/UTKFace'
+DIR_NAME = '../race/UTKFace'
 
 if __name__ == '__main__':
     for file_name in os.listdir(DIR_NAME):
