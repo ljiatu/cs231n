@@ -1,17 +1,16 @@
+import csv
 import os
 
 from skimage import io
 from torch.utils.data import Dataset
 
-from utils.age_detection_utils import get_age_bucket
 
-
-class IMDbWikiEthnicityDataset(Dataset):
+class ChaLearnEthnicityDataset(Dataset):
     """
-    IMDb-Wiki dataset with images split into different directories based on ethnicities.
+    ChaLearn dataset with images split into different directories based on ethnicities.
     """
 
-    def __init__(self, image_dir, transform=None):
+    def __init__(self, image_dir: str, label_file_path: str, transform=None):
         """
         Args:
             image_dir: Directory with all the images of a specific ethnicity.
@@ -22,6 +21,12 @@ class IMDbWikiEthnicityDataset(Dataset):
         self.num_images = len(os.listdir(image_dir))
         self.image_file_paths = [f'{image_dir}/{file_name}' for file_name in os.listdir(image_dir)]
 
+        with open(label_file_path) as label_file:
+            label_reader = csv.reader(label_file)
+            # Skip the header row.
+            next(label_reader)
+            self.labels = {row[0]: row[1] for row in label_reader}
+
     def __len__(self):
         return self.num_images
 
@@ -31,4 +36,5 @@ class IMDbWikiEthnicityDataset(Dataset):
         if self.transform:
             image = self.transform(image)
 
-        return image, get_age_bucket(file_path)
+        file_name = file_path.split('/')[-1]
+        return image, int(round(float(self.labels[file_name])))

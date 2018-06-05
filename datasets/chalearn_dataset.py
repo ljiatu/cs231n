@@ -37,7 +37,7 @@ class ChaLearnDataset(Dataset):
     def __len__(self):
         return self.num_images
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx: int):
         file_path = self.image_file_paths[idx]
         image = io.imread(file_path)
         if self.transform:
