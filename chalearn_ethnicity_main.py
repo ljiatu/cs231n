@@ -50,13 +50,13 @@ def _split_data():
         transforms.RandomHorizontalFlip(),
         transforms.ColorJitter(),
         transforms.ToTensor(),
-        transforms.Normalize([0.5797703, 0.43427974, 0.38307136], [0.25409877, 0.22383073, 0.21819368]),
+        transforms.Normalize([0.5808307, 0.42547262, 0.36169884], [0.2699111, 0.22372025, 0.21239479]),
     ])
     val_transform = transforms.Compose([
         transforms.ToPILImage(),
         transforms.Resize((224, 224)),
         transforms.ToTensor(),
-        transforms.Normalize([0.5797703, 0.43427974, 0.38307136], [0.25409877, 0.22383073, 0.21819368]),
+        transforms.Normalize([0.5808307, 0.42547262, 0.36169884], [0.2699111, 0.22372025, 0.21239479]),
     ])
     train_dataset = ChaLearnTrainingDataset(
         ['ChaLearn/images/train_1', 'ChaLearn/images/train_2'],
