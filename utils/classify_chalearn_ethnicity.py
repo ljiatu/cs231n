@@ -7,8 +7,9 @@ from torch import nn
 from torch.nn import functional as F
 from torchvision import transforms, models
 
-from constants import ETHNICITIES
-from utils.add_channel import AddChannel
+from add_channel import AddChannel
+
+ETHNICITIES = ['caucasian', 'black', 'asian', 'indian', 'others']
 
 
 def main():
@@ -23,7 +24,7 @@ def main():
     ethnicity_model = ethnicity_model.to(device=device)
     num_ftrs = ethnicity_model.fc.in_features
     ethnicity_model.fc = nn.Linear(num_ftrs, 5).to(device=device)
-    ethnicity_model.load_state_dict(torch.load('../models/utk_model_resnet_50.pt'))
+    ethnicity_model.load_state_dict(torch.load('models/utk_model_resnet_50.pt'))
     ethnicity_model.eval()
 
     transform = transforms.Compose([
@@ -37,10 +38,10 @@ def main():
     precessed = 0
     low_probability_images = []
     for subdir in ['train_1', 'train_2', 'valid']:
-        dir_path = f'../ChaLearn/images/{subdir}'
+        dir_path = f'ChaLearn/images/{subdir}'
         print(f'Processing directory {dir_path}')
         for file_name in os.listdir(dir_path):
-            file_path = f'{subdir}/{file_name}'
+            file_path = f'{dir_path}/{file_name}'
             image = transform(io.imread(file_path)).unsqueeze(0).to(device=device)
             with torch.no_grad():
                 scores = ethnicity_model(image)
@@ -49,7 +50,7 @@ def main():
                 if probability < 0.6:
                     low_probability_images.append(f'{file_path}\n')
                 else:
-                    shutil.copy2(file_path, f'../ChaLearn/ethnicity/{ETHNICITIES[ethnicity]}/')
+                    shutil.copy2(file_path, f'ChaLearn/ethnicity/{ETHNICITIES[ethnicity]}/')
 
                 precessed += 1
 

@@ -2,7 +2,7 @@ import numpy as np
 from torch.utils.data import DataLoader
 from torchvision.transforms import transforms
 
-from constants import ETHNICITIES
+from ..constants import ETHNICITIES
 from datasets.imdb_wiki_ethnicity_dataset import IMDbWikiEthnicityDataset
 from utils.add_channel import AddChannel
 
