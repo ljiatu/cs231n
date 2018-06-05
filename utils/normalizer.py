@@ -2,12 +2,9 @@ import numpy as np
 from torch.utils.data import DataLoader
 from torchvision.transforms import transforms
 
-from add_channel import AddChannel
-from chalearn_training_dataset import ChaLearnTrainingDataset
 from constants import ETHNICITIES
-from imdb_wiki_dataset import IMDbWikiDataset
-from imdb_wiki_ethnicity_dataset import IMDbWikiEthnicityDataset
-from utk_dataset import UTKDataset
+from datasets.imdb_wiki_ethnicity_dataset import IMDbWikiEthnicityDataset
+from utils.add_channel import AddChannel
 
 
 def main():
@@ -30,7 +27,7 @@ def main():
     #     transform,
     # )
     for ethnicity in ETHNICITIES:
-        dataset = IMDbWikiEthnicityDataset(f'imdb_wiki_ethnicity/{ethnicity}', transform)
+        dataset = IMDbWikiEthnicityDataset(f'../imdb_wiki_ethnicity/{ethnicity}', transform)
         loader = DataLoader(dataset, batch_size=2048, num_workers=6)
 
         running_mean = []

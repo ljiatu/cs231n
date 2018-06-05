@@ -4,7 +4,7 @@ from torch.nn import functional as F
 from torchvision import models
 
 from constants import ETHNICITIES, NUM_AGE_BUCKETS
-from utk_dataset import NUM_ETHNICITY_BUCKETS
+from datasets.utk_dataset import NUM_ETHNICITY_BUCKETS
 
 
 class AgethNet(torch.nn.Module):

@@ -4,11 +4,11 @@ from torch.utils.data import DataLoader
 from torch.utils.data import sampler
 from torchvision import transforms
 
-from add_channel import AddChannel
-from agethnet import AgethNet
-from agethnet_result_check import check_result
-from imdb_wiki_dataset import IMDbWikiDataset
+from datasets.imdb_wiki_dataset import IMDbWikiDataset
+from models.agethnet import AgethNet
 from trainer import Trainer
+from utils.add_channel import AddChannel
+from utils.agethnet_result_check import check_result
 
 BATCH_SIZE = 128
 DATA_LOADER_NUM_WORKERS = 10

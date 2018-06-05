@@ -2,12 +2,11 @@ import torch
 from torch import optim
 from torch.utils.data import DataLoader
 from torch.utils.data import sampler
-from torchvision import transforms, models
+from torchvision import transforms
 
-from age_detection_utils import check_result
-from chalearn_training_dataset import ChaLearnTrainingDataset
-from constants import NUM_AGE_BUCKETS
-from soft_argmax import SoftArgmaxLoss
+from utils.age_detection_utils import check_result
+from datasets.chalearn_training_dataset import ChaLearnTrainingDataset
+from loss_funcs.soft_argmax import SoftArgmaxLoss
 from trainer import Trainer
 
 BATCH_SIZE = 400

@@ -4,7 +4,7 @@ from torch.utils.data import DataLoader
 from torch.utils.data import sampler
 from torchvision import models, transforms
 
-from chalearn_training_dataset import ChaLearnDataset
+from datasets.chalearn_training_dataset import ChaLearnDataset
 from constants import NUM_AGE_BUCKETS
 
 MODEL_PATH = 'models/model_imdb_wiki_norm_0001.pt'

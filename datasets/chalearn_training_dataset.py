@@ -1,4 +1,4 @@
-from chaLearn_dataset import ChaLearnDataset
+from datasets.chalearn_dataset import ChaLearnDataset
 
 
 class ChaLearnTrainingDataset(ChaLearnDataset):

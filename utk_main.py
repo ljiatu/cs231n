@@ -5,9 +5,9 @@ from torch.utils.data import DataLoader
 from torch.utils.data import sampler
 from torchvision import models, transforms
 
-from ethnicity_detection_check_result import check_result
+from utils.ethnicity_detection_check_result import check_result
 from trainer import Trainer
-from utk_dataset import NUM_ETHNICITY_BUCKETS, UTKDataset
+from datasets.utk_dataset import NUM_ETHNICITY_BUCKETS, UTKDataset
 
 BATCH_SIZE = 128
 DATA_LOADER_NUM_WORKERS = 10

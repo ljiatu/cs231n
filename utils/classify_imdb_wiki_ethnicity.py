@@ -1,4 +1,3 @@
-import os
 import shutil
 
 import torch
@@ -7,7 +6,7 @@ from torch import nn
 from torch.nn import functional as F
 from torchvision import transforms, models
 
-from add_channel import AddChannel
+from utils.add_channel import AddChannel
 
 ETHNICITIES = ['caucasian', 'black', 'asian', 'indian', 'others']
 
@@ -24,7 +23,7 @@ def main():
     ethnicity_model = ethnicity_model.to(device=device)
     num_ftrs = ethnicity_model.fc.in_features
     ethnicity_model.fc = nn.Linear(num_ftrs, 5).to(device=device)
-    ethnicity_model.load_state_dict(torch.load('models/utk_model_resnet_50.pt'))
+    ethnicity_model.load_state_dict(torch.load('../models/utk_model_resnet_50.pt'))
     ethnicity_model.eval()
 
     transform = transforms.Compose([
@@ -60,7 +59,7 @@ def main():
 
     #         with open('uncertain.txt', 'w') as f:
     #             f.writelines(low_probability_images)
-    # Try increasing threshould to 0.7.
+    # Try increasing threshold to 0.7.
     still_uncertain = []
     with open('uncertain.txt', 'r') as f:
         file_paths = f.readlines()
@@ -74,10 +73,11 @@ def main():
                 if probability < 0.5:
                     still_uncertain.append(f'{file_path},{probability[0]}\n')
                 else:
-                    shutil.copy2(file_path, f'imdb_wiki_ethnicity/{ETHNICITIES[ethnicity]}/')
+                    shutil.copy2(file_path, f'../imdb_wiki_ethnicity/{ETHNICITIES[ethnicity]}/')
 
     with open('still_uncertain.txt', 'w') as f:
         f.writelines(still_uncertain)
+
 
 if __name__ == '__main__':
     main()
