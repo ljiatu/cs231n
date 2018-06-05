@@ -6,9 +6,8 @@ from torch import nn
 from torch.nn import functional as F
 from torchvision import transforms, models
 
+from constants import ETHNICITIES
 from utils.add_channel import AddChannel
-
-ETHNICITIES = ['caucasian', 'black', 'asian', 'indian', 'others']
 
 
 def main():
