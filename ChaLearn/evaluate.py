@@ -5,6 +5,8 @@ import math
 # ------------------------------------------------------
 # Main evaluation functions
 # ------------------------------------------------------
+import sys
+
 
 def load_labels(fpath):
     labels = {}
@@ -46,9 +48,12 @@ def evaluate_predictions(gt, preds):
 
 
 def main():
+    if len(sys.argv) < 2:
+        raise ValueError('Output file name must be specified!')
+
     # Load ground truth & predictions
     labels = load_labels('gt/test_gt.csv')
-    preds = load_predictions('output_0001.csv')
+    preds = load_predictions(sys.argv[1])
 
     # Evaluate predictions
     score = evaluate_predictions(labels, preds)

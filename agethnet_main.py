@@ -1,3 +1,4 @@
+import sys
 import torch
 from torch.nn import functional as F
 from torch.utils.data import DataLoader
@@ -8,12 +9,18 @@ from constants import NUM_AGE_BUCKETS, ETHNICITIES
 from datasets.chalearn_training_dataset import ChaLearnDataset
 
 ETHNICITY_MODEL_PATH = 'models/utk_model_resnet_50.pt'
-OUTPUT_FILE_NAME = 'ChaLearn/output_agethnet.csv'
 BATCH_SIZE = 400
 DATA_LOADER_NUM_WORKERS = 10
+MODES = ['expected', 'max']
 
 
 def main():
+    if len(sys.argv) < 3 or sys.argv[1] not in MODES:
+        raise ValueError(f"Mode must be specified, and be one of {MODES}")
+
+    mode = sys.argv[1]
+    output_file_path = sys.argv[2]
+
     if torch.cuda.is_available():
         device = torch.device('cuda')
     else:
@@ -59,23 +66,27 @@ def main():
 
     # Test and write the results to a file.
     with torch.no_grad():
-        with open(OUTPUT_FILE_NAME, 'w') as output:
+        with open(output_file_path, 'w') as output:
             for x, file_names in loader:
                 x = x.to(device=device)
                 ethnicity_scores = ethnicity_model(x)
                 ethnicity_probabilities = F.softmax(ethnicity_scores, dim=1)
 
-                predicted_ages = []
+                age_scores = torch.zeros(x.size()[0], len(ETHNICITIES), NUM_AGE_BUCKETS).to(device=device)
                 for i in range(len(ETHNICITIES)):
-                    age_scores = age_models[i](x)
-                    predicted_age = (
-                        (F.softmax(age_scores, dim=1) * torch.arange(end=NUM_AGE_BUCKETS, device=device)).sum(dim=1)
-                    )
-                    predicted_ages.append(predicted_age)
+                    age_scores[:, i, :] = age_models[i](x)
 
-                ages_tensor = torch.stack(predicted_ages, dim=1)
+                per_ethnicity_ages = (
+                    (F.softmax(age_scores, dim=2) * torch.arange(end=NUM_AGE_BUCKETS, device=device)).sum(dim=2)
+                )
 
-                predicted_ages = (ethnicity_probabilities * ages_tensor).sum(dim=1).round()
+                if mode == 'expected':
+                    # Calculates an expected age using all ethnicity probabilities.
+                    predicted_ages = (ethnicity_probabilities * per_ethnicity_ages).sum(dim=1).round()
+                else:
+                    # Use the age from the most likely ethnicity.
+                    ethnicity_idx = ethnicity_probabilities.argmax(dim=1)
+                    predicted_ages = per_ethnicity_ages.gather(1, ethnicity_idx.view(-1, 1))
 
                 lines = [f'{file_name},{age}\n' for file_name, age in zip(file_names, predicted_ages)]
                 output.writelines(lines)
