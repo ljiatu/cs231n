@@ -14,7 +14,7 @@ from utils.age_detection_utils import check_result
 BATCH_SIZE = 350
 DATA_LOADER_NUM_WORKERS = 10
 IMAGE_DIR = 'imdb_wiki_ethnicity'
-EPOCHS = [2, 3, 1]
+EPOCHS = [10, 5, 2, 3, 1]
 NORMS = [
     [[0.58159447, 0.43522802, 0.36891466], [0.24821207, 0.21232615, 0.20570053]],
     [[0.45464125, 0.324485, 0.2616199], [0.23923942, 0.19709928, 0.18780835]],
@@ -32,7 +32,7 @@ def main():
 
     print(f'Using device {device}')
 
-    for ethnicity, num_epochs, norm in zip(['asian', 'indian', 'others'], EPOCHS, NORMS):
+    for ethnicity, num_epochs, norm in zip(ETHNICITIES, EPOCHS, NORMS):
         model_path = f'models/agethnet-{ethnicity}.pt'
         # Use a pretrained RESNET-18 model.
         model = models.resnet18(pretrained=True)
