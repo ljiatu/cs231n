@@ -7,8 +7,8 @@ from torchvision import models, transforms
 from datasets.chalearn_training_dataset import ChaLearnDataset
 from constants import NUM_AGE_BUCKETS
 
-MODEL_PATH = 'models/model_imdb_wiki_norm_0001.pt'
-OUTPUT_FILE_NAME = 'ChaLearn/output_0001.csv'
+MODEL_PATH = 'models/model_imdb_wiki_norm_0001_epoch20.pt'
+OUTPUT_FILE_NAME = 'ChaLearn/output_0001_epoch20.csv'
 BATCH_SIZE = 400
 DATA_LOADER_NUM_WORKERS = 10
 
