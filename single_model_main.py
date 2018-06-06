@@ -4,11 +4,12 @@ from torch.utils.data import DataLoader
 from torch.utils.data import sampler
 from torchvision import transforms, models
 
-from utils.add_channel import AddChannel
-from utils.age_detection_utils import check_result
-from datasets.imdb_wiki_dataset import IMDbWikiDataset, NUM_AGE_BUCKETS
+from constants import NUM_AGE_BUCKETS
+from datasets.imdb_wiki_dataset import IMDbWikiDataset
 from loss_funcs.soft_argmax import SoftArgmaxLoss
 from trainer import Trainer
+from utils.add_channel import AddChannel
+from utils.age_detection_utils import check_result
 
 BATCH_SIZE = 400
 DATA_LOADER_NUM_WORKERS = 10
