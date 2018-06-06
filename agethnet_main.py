@@ -19,7 +19,7 @@ def main():
         raise ValueError(f"Mode must be specified, and be one of {MODES}")
 
     mode = sys.argv[1]
-    output_file_path = sys.argv[2]
+    output_file_path = f'ChaLearn/{sys.argv[2]}'
 
     if torch.cuda.is_available():
         device = torch.device('cuda')
