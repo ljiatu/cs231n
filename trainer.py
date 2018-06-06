@@ -1,3 +1,4 @@
+import copy
 import time
 
 import torch
@@ -37,6 +38,7 @@ class Trainer:
 
         # Keep track of the best model.
         best_val_acc = 0.0
+        best_model_wts = copy.deepcopy(self.model.state_dict())
 
         for e in range(self.num_epochs):
             print('-' * 10)
@@ -84,11 +86,14 @@ class Trainer:
             #             self.scheduler.step(epoch_val_loss)
             if epoch_val_acc > best_val_acc:
                 best_val_acc = epoch_val_acc
+                best_model_wts = copy.deepcopy(self.model.state_dict())
                 self._save_model()
 
         time_elapsed = time.time() - start
         print('Training complete in {:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
         print(f'Best val accuracy: {best_val_acc * 100}%')
+        # Load the model for test.
+        self.model.load_state_dict(best_model_wts)
 
     def test(self):
         print('Test accuracy')
