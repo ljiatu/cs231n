@@ -86,7 +86,7 @@ def main():
                 else:
                     # Use the age from the most likely ethnicity.
                     ethnicity_idx = ethnicity_probabilities.argmax(dim=1)
-                    predicted_ages = per_ethnicity_ages.gather(1, ethnicity_idx.view(-1, 1))[0].round()
+                    predicted_ages = per_ethnicity_ages.gather(1, ethnicity_idx.view(-1, 1))[:, 0].round()
 
                 lines = [f'{file_name},{age}\n' for file_name, age in zip(file_names, predicted_ages)]
                 output.writelines(lines)
