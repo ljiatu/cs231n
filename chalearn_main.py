@@ -11,7 +11,7 @@ from trainer import Trainer
 
 BATCH_SIZE = 400
 DATA_LOADER_NUM_WORKERS = 10
-MODEL_PATH = 'models/model_imdb_wiki_norm_0001.pt'
+MODEL_PATH = 'models/model_imdb_wiki_norm_0001_epoch20.pt'
 
 
 def main():
@@ -22,11 +22,6 @@ def main():
     print(f'Using device {device}')
 
     # Load the pretrained RESNET-18 model.
-    #     model = models.resnet18(pretrained=True)
-    #     model = model.to(device=device)
-    #     num_ftrs = model.fc.in_features
-    #     model.fc = torch.nn.Linear(num_ftrs, NUM_AGE_BUCKETS).to(device=device)
-    #     model.load_state_dict(torch.load(MODEL_PATH))
     model = torch.load(MODEL_PATH).to(device=device)
     loss_func = SoftArgmaxLoss().to(device=device)
     # dtype depends on the loss function.
