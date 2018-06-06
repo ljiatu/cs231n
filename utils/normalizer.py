@@ -27,7 +27,7 @@ def main():
     #     transform,
     # )
     for ethnicity in ETHNICITIES:
-        dataset = ChaLearnEthnicityDataset(f'../ChaLearn/ethnicity/{ethnicity}', '../ChaLearn/ethnicity/gt.csv', transform)
+        dataset = ChaLearnEthnicityDataset(f'ChaLearn/ethnicity/{ethnicity}', 'ChaLearn/ethnicity/gt.csv', transform)
         loader = DataLoader(dataset, batch_size=2048, num_workers=6)
 
         running_mean = []
